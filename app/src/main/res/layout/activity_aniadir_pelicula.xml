@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".aniadirPelicula">
+
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/ap_tv_aniadirpelicula"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Añadir película"
+            android:textAlignment="center"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/ap_t_nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Nombre" />
+
+        <EditText
+            android:id="@+id/ap_t_anio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Año" />
+
+        <EditText
+            android:id="@+id/ap_t_portada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="URL Portada" />
+
+        <RatingBar
+            android:id="@+id/ap_rb_valoracion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numStars="5" />
+
+        <EditText
+            android:id="@+id/ap_t_descripcion"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Descripción" />
+
+        <Button
+            android:id="@+id/ap_b_aniadir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Añadir" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
