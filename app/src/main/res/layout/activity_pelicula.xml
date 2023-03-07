@@ -51,8 +51,7 @@
 
                 <RatingBar
                     android:id="@+id/p_rb_valoracion"
-                    style="?android:attr/ratingBarStyleIndicator"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5" />
 
@@ -62,7 +61,7 @@
         <TextView
             android:id="@+id/p_tv_descripcion"
             android:layout_width="match_parent"
-            android:layout_height="258dp"
+            android:layout_height="327dp"
             android:paddingTop="10dp"
             android:text="Descripción" />
 

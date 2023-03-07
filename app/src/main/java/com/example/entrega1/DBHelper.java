@@ -7,13 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import java.sql.ResultSet;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     private Context context;
     private static final String DB_NAME= "Cinema.db";
     private static final int DB_VERSION=1;
-
-
 
     public DBHelper(Context context){
         super(context,DB_NAME,null,DB_VERSION);
@@ -26,6 +26,14 @@ public class DBHelper extends SQLiteOpenHelper {
         String sqlUsuarios="CREATE TABLE Usuarios(id VARCHAR PRIMARY KEY, contrasenia VARCHAR, correo VARCHAR, telefono INTEGER, nombreapellido VARCHAR)";
         db.execSQL(sqlPeliculas);
         db.execSQL(sqlUsuarios);
+    }
+
+    public Cursor leerPeliculas(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        String sqldatos= "SELECT * FROM Peliculas";
+        Cursor c=null;
+        if (db != null){c= db.rawQuery(sqldatos,null);}
+        return c;
     }
 
     public void aniadirPelicula(String nombre, Integer anio, String url, Float valoracion, String descripcion){
@@ -45,32 +53,59 @@ public class DBHelper extends SQLiteOpenHelper {
         else{
             Toast.makeText(context,"Se ha añadido la película", Toast.LENGTH_SHORT).show();
         }
-
-
         db.close();
     }
 
-    public void aniadirUsuario(String id, String contrasenia, String correo, Integer telefono, String nombreapellido){
+    public void aniadirUsuario(String usuario, String contrasenia, String correo, Integer telefono, String nombreapellido){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
 
-        cv.put("id", id);
+        cv.put("id", usuario);
         cv.put("contrasenia", contrasenia);
         cv.put("correo", correo);
         cv.put("telefono", telefono);
         cv.put("nombreapellido", nombreapellido);
-        db.insert("Usuarios",null,cv);
-        db.close();
+        long r=db.insert("Usuarios",null,cv);
+        if(r==-1){
+            Toast.makeText(context,"No se ha podido registrar el usuario", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(context,"Usuario registrado", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void eliminarPelicula(String nombre){
+    public void modificarPelicula(String id, String nombre, Integer anio, String url, Float valoracion, String descripcion){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
 
-        Cursor idpelicula = db.rawQuery("select id from Peliculs where nombre like '" + nombre + "'", null);
-        String sqldelete="DELETE FROM Peliculas where id='"+idpelicula.getInt(0)+"';";
-        db.execSQL(sqldelete);
-        db.close();
+        cv.put("nombre", nombre);
+        cv.put("anio",anio);
+        cv.put("url",url);
+        cv.put("valoracion",valoracion);
+        cv.put("descripcion",descripcion);
+
+        long r=db.update("Peliculas",cv, "id=?", new String[]{id});
+        if(r==-1){
+            Toast.makeText(context,"No se ha podido actualizar la película", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(context,"Película actualizada", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void eliminarPelicula(String id){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+
+        long r=db.delete("Peliculas","id=?",new String[]{id});
+        if (r==-1){
+            Toast.makeText(context,"No se ha podido borrar la película", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(context,"Película borrada", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void eliminarUsuario(String idusuario){
@@ -80,6 +115,26 @@ public class DBHelper extends SQLiteOpenHelper {
         String sqldelete="DELETE FROM Usuarios where id='"+idusuario+"';";
         db.execSQL(sqldelete);
         db.close();
+    }
+
+    public Cursor existeUsuario(String idusuario){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+
+        Cursor c=null;
+        if (db != null){c= db.rawQuery("SELECT * FROM Usuarios WHERE id=?",new String[]{idusuario});
+        }
+        return c;
+    }
+
+    public Cursor existeUsuarioContrasenia(String idusuario, String contrasenia){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+
+        Cursor c=null;
+        if (db != null){c= db.rawQuery("SELECT * FROM Usuarios WHERE id=? AND contrasenia=?",new String[]{idusuario,contrasenia});
+        }
+        return c;
     }
 
     @Override
