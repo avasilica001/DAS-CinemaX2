@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".editar_pelicula">
+    tools:context=".EditarPelicula">
 
     <LinearLayout
         android:id="@+id/l_editar"
@@ -34,24 +34,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Nombre" />
+            android:hint="Nombre"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/ep_t_anio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Año" />
+            android:hint="Año"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/ep_t_portada"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="URL Portada" />
+            android:hint="URL Portada"
+            android:inputType="textPersonName" />
 
         <RatingBar
             android:id="@+id/ep_rb_valoracion"
@@ -65,8 +65,9 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Descripción" />
+
+            android:hint="Descripción"
+            android:inputType="textMultiLine" />
 
         <Button
             android:id="@+id/ep_b_actualizar"

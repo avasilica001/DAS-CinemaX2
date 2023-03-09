@@ -21,31 +21,46 @@
 
     <LinearLayout
         android:id="@+id/l_main"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:paddingLeft="15dp"
         android:paddingTop="15dp"
         android:paddingEnd="15dp"
         android:paddingRight="15dp"
         android:paddingBottom="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/lp_tv_listapeliculas"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lista de Películas"
-            android:textAlignment="center"
-            android:textSize="30dp"
-            android:textStyle="bold" />
+            android:dividerPadding="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/lp_b_todas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:text="Todas las películas" />
+
+            <Button
+                android:id="@+id/lp_b_deusuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:text="Películas del usuario" />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/lp_lv_listapeliculas"
-            android:layout_width="match_parent"
-            android:layout_height="522dp"
+            android:layout_width="wrap_content"
+            android:layout_height="500dp"
             android:scrollbarSize="20dp">
 
         </ListView>

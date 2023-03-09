@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 public class DBHelper extends SQLiteOpenHelper {
 
     private Context context;
-    private static final String DB_NAME= "Cinema.db";
+    private static final String DB_NAME= "CinemaX.db";
     private static final int DB_VERSION=1;
 
     public DBHelper(Context context){
@@ -22,13 +22,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sqlPeliculas="CREATE TABLE Peliculas(id INTEGER PRIMARY KEY AUTOINCREMENT,nombre VARCHAR,anio INTEGER, url VARCHAR, valoracion DOUBLE, descripcion VARCHAR)";
+        String sqlPeliculas="CREATE TABLE Peliculas(id INTEGER PRIMARY KEY AUTOINCREMENT,nombre VARCHAR,anio INTEGER, url VARCHAR, valoracion DOUBLE, descripcion VARCHAR, subidapor VARCHAR, FOREIGN KEY(subidapor) REFERENCES Usuario(id))";
         String sqlUsuarios="CREATE TABLE Usuarios(id VARCHAR PRIMARY KEY, contrasenia VARCHAR, correo VARCHAR, telefono INTEGER, nombreapellido VARCHAR)";
-        db.execSQL(sqlPeliculas);
         db.execSQL(sqlUsuarios);
+        db.execSQL(sqlPeliculas);
     }
 
-    public Cursor leerPeliculas(){
+    public Cursor leerPeliculasTodas(){
         SQLiteDatabase db=this.getWritableDatabase();
         String sqldatos= "SELECT * FROM Peliculas";
         Cursor c=null;
@@ -36,7 +36,16 @@ public class DBHelper extends SQLiteOpenHelper {
         return c;
     }
 
-    public void aniadirPelicula(String nombre, Integer anio, String url, Float valoracion, String descripcion){
+    public Cursor leerPeliculasUsuario(String usuario){
+        SQLiteDatabase db=this.getWritableDatabase();
+        String sqldatos= "SELECT * FROM Peliculas WHERE subidapor=?";
+        //Toast.makeText(context,"usuario"+String.valueOf(usuario),Toast.LENGTH_SHORT).show();
+        Cursor c=null;
+        if (db != null){c= db.rawQuery(sqldatos,new String[]{String.valueOf(usuario)});}
+        return c;
+    }
+
+    public void aniadirPelicula(String nombre, Integer anio, String url, Float valoracion, String descripcion,String usuario){
         SQLiteDatabase db=getWritableDatabase();
         ContentValues cv=new ContentValues();
 
@@ -45,6 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("url",url);
         cv.put("valoracion",valoracion);
         cv.put("descripcion",descripcion);
+        cv.put("subidapor",usuario);
         long r= db.insert("Peliculas",null,cv);
 
         if (r==-1){
@@ -65,6 +75,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("correo", correo);
         cv.put("telefono", telefono);
         cv.put("nombreapellido", nombreapellido);
+
         long r=db.insert("Usuarios",null,cv);
         if(r==-1){
             Toast.makeText(context,"No se ha podido registrar el usuario", Toast.LENGTH_SHORT).show();
@@ -94,6 +105,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public Cursor buscarPelicula(String id){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+        String sqlp= "SELECT * FROM Peliculas WHERE id=?";
+        Cursor c=null;
+        if (db != null){
+            Toast.makeText(context,id, Toast.LENGTH_SHORT).show();
+            c=db.rawQuery(sqlp,new String[]{id});
+        }
+        return c;
+    }
+
     public void eliminarPelicula(String id){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
@@ -108,6 +131,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    //no se si lo voy a usar de momento pero se queda
     public void eliminarUsuario(String idusuario){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();

@@ -1,5 +1,6 @@
 package com.example.entrega1;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -11,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class iniciar_sesion extends AppCompatActivity {
+public class IniciarSesion extends AppCompatActivity {
 
     Context context=this;
 
@@ -19,6 +20,9 @@ public class iniciar_sesion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iniciar_sesion);
+
+        ActionBar ab=getSupportActionBar();
+        ab.setTitle("CinemaX");
 
         EditText usuario=findViewById(R.id.is_t_usuario);
         EditText contrasenia=findViewById(R.id.is_t_contrasenia);
@@ -28,7 +32,7 @@ public class iniciar_sesion extends AppCompatActivity {
         iniciars.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper db=new DBHelper(iniciar_sesion.this);
+                DBHelper db=new DBHelper(IniciarSesion.this);
                 Cursor c=db.existeUsuario(usuario.getText().toString().trim());
 
                 if (c.getCount()==0) {
@@ -40,20 +44,20 @@ public class iniciar_sesion extends AppCompatActivity {
                         Toast.makeText(context,"Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        Intent intent=new Intent(iniciar_sesion.this, MainActivity.class);
-                        iniciar_sesion.this.startActivity(intent);
+                        Intent intent=new Intent(IniciarSesion.this, MainActivity.class);
+                        intent.putExtra("id",usuario.getText().toString().trim());
+                        IniciarSesion.this.startActivity(intent);
                     }
-
                 }
-
+                finish();
             }
         });
 
         registrarse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(iniciar_sesion.this, registrarse.class);
-                iniciar_sesion.this.startActivity(intent);
+                Intent intent=new Intent(IniciarSesion.this, Registro.class);
+                IniciarSesion.this.startActivity(intent);
             }
         });
 

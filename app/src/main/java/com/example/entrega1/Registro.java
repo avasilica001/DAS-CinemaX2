@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class registrarse extends AppCompatActivity {
+public class Registro extends AppCompatActivity {
 
      EditText nombre, usuario, email, telefono, contrasenia;
 
@@ -32,7 +32,7 @@ public class registrarse extends AppCompatActivity {
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper db=new DBHelper(registrarse.this);
+                DBHelper db=new DBHelper(Registro.this);
                 db.aniadirUsuario(nombre.getText().toString().trim(),contrasenia.getText().toString().trim(),email.getText().toString().trim(),Integer.valueOf(telefono.getText().toString().trim()),nombre.getText().toString().trim());
                 finish();
             }

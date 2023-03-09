@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 
-public class aniadirPelicula extends AppCompatActivity {
+public class AniadirPelicula extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +25,11 @@ public class aniadirPelicula extends AppCompatActivity {
         Button aniadir= (Button) findViewById(R.id.ep_b_actualizar);
 
         aniadir.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                DBHelper db=new DBHelper(aniadirPelicula.this);
-                db.aniadirPelicula(titulo.getText().toString().trim(),Integer.valueOf(anio.getText().toString().trim()),url.getText().toString().trim(),valoracion.getRating(),descripcion.getText().toString().trim());
+                DBHelper db=new DBHelper(AniadirPelicula.this);
+                db.aniadirPelicula(titulo.getText().toString().trim(),Integer.valueOf(anio.getText().toString().trim()),url.getText().toString().trim(),valoracion.getRating(),descripcion.getText().toString().trim(),getIntent().getStringExtra("id"));
+                finish();
             }
         });
     }

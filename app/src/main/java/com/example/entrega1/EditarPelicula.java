@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
-public class editar_pelicula extends AppCompatActivity {
+public class EditarPelicula extends AppCompatActivity {
 
     EditText id, nombre, anio, url, descripcion;
     RatingBar valoracion;
@@ -43,41 +43,13 @@ public class editar_pelicula extends AppCompatActivity {
         actualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper db=new DBHelper(editar_pelicula.this);
+                DBHelper db=new DBHelper(EditarPelicula.this);
                 db.modificarPelicula(s_id,nombre.getText().toString().trim(),Integer.valueOf(anio.getText().toString().trim()), url.getText().toString().trim(),valoracion.getRating(), descripcion.getText().toString().trim());
                 finish();
             }
         });
-
-        eliminar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmarBorrar();
-            }
-        });
     }
 
-    private void confirmarBorrar(){
-        AlertDialog.Builder ad=new AlertDialog.Builder(this);
-        ad.setTitle("Eliminar "+nombre.getText().toString().trim());
-        ad.setMessage("¿Estás seguro de que quieres borrar "+nombre.getText().toString().trim()+"? No podrás recuperar la películas después");
-        ad.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                DBHelper db=new DBHelper(editar_pelicula.this);
-                db.eliminarPelicula(s_id);
-                finish();
-            }
-        });
-        ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //no hace nada
-            }
-        });
-        ad.create().show();
-
-    }
 
     private void obtenerDatosIntent(){
         if(getIntent().hasExtra("id") && getIntent().hasExtra("titulo") && getIntent().hasExtra("anio") && getIntent().hasExtra("url") && getIntent().hasExtra("valoracion") && getIntent().hasExtra("descripcion") ){
