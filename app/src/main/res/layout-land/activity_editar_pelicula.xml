@@ -75,11 +75,6 @@
                 android:layout_height="wrap_content"
                 android:text="Actualizar" />
 
-            <Button
-                android:id="@+id/ep_b_eliminar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Eliminar" />
         </LinearLayout>
     </ScrollView>
 

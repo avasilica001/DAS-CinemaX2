@@ -6,80 +6,76 @@
     android:layout_height="match_parent"
     tools:context=".EditarPelicula">
 
-    <LinearLayout
-        android:id="@+id/l_editar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/ep_tv_editarpelicula"
+        <LinearLayout
+            android:id="@+id/l_editar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Editar película"
-            android:textAlignment="center"
-            android:textSize="30dp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp">
 
-        <EditText
-            android:id="@+id/ep_t_nombre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Nombre"
-            android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/ep_tv_editarpelicula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Editar película"
+                android:textAlignment="center"
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/ep_t_anio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Año"
-            android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/ep_t_nombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Nombre"
+                android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/ep_t_portada"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="URL Portada"
-            android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/ep_t_anio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Año"
+                android:inputType="textPersonName" />
 
-        <RatingBar
-            android:id="@+id/ep_rb_valoracion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:progressTint="#3F51B5" />
+            <EditText
+                android:id="@+id/ep_t_portada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="URL Portada"
+                android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/ep_t_descripcion"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:ems="10"
+            <RatingBar
+                android:id="@+id/ep_rb_valoracion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:progressTint="#3F51B5" />
 
-            android:hint="Descripción"
-            android:inputType="textMultiLine" />
+            <EditText
+                android:id="@+id/ep_t_descripcion"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:ems="10"
 
-        <Button
-            android:id="@+id/ep_b_actualizar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Actualizar" />
+                android:hint="Descripción"
+                android:inputType="textMultiLine" />
 
-        <Button
-            android:id="@+id/ep_b_eliminar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Eliminar" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/ep_b_actualizar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actualizar" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

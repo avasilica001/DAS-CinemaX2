@@ -6,74 +6,75 @@
     android:layout_height="match_parent"
     tools:context=".Registro">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/r_tv_registrarse"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Registrarse"
-            android:textAlignment="center"
-            android:textSize="30dp" />
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp">
 
-        <EditText
-            android:id="@+id/r_t_nombrecompleto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Nombre Completo"
-            android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/r_tv_registrarse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Registrarse"
+                android:textAlignment="center"
+                android:textSize="30dp" />
 
-        <EditText
-            android:id="@+id/r_tv_usuario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Nombre de usuario"
-            android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/r_t_nombrecompleto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Nombre Completo"
+                android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/r_t_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Email"
-            android:inputType="textWebEmailAddress" />
+            <EditText
+                android:id="@+id/r_tv_usuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Nombre de usuario"
+                android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/r_t_telefono"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Número de teléfono"
-            android:inputType="phone" />
+            <EditText
+                android:id="@+id/r_t_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Email"
+                android:inputType="textWebEmailAddress" />
 
-        <EditText
-            android:id="@+id/r_t_contrasenia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Contraseña"
-            android:inputType="textWebPassword" />
+            <EditText
+                android:id="@+id/r_t_telefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Número de teléfono"
+                android:inputType="phone" />
 
-        <Button
-            android:id="@+id/r_b_registrarse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:text="Registrarse" />
+            <EditText
+                android:id="@+id/r_t_contrasenia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Contraseña"
+                android:inputType="textWebPassword" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/r_b_registrarse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="Registrarse" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

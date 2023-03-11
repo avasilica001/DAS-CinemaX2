@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> p_subidapor=new ArrayList();
 
     ListaPeliculasAdapter adapter;
-    TextView noPeliculas;
     String s_id;
     Cursor c;
 
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        noPeliculas=findViewById(R.id.lp_tv_nohay);
 
         s_id= getIntent().getStringExtra("id");
 
@@ -91,11 +89,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void guardarDatosArray(){
         if (c.getCount()==0){
-            noPeliculas.setVisibility(View.VISIBLE);
             Toast.makeText(this,"No hay películas para mostrar",Toast.LENGTH_SHORT).show();
         }
         else{
-            noPeliculas.setVisibility(View.GONE);
             while(c.moveToNext()){
                 p_id.add(c.getString(0));
                 p_nombre.add(c.getString(1));

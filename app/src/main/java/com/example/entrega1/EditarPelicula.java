@@ -31,7 +31,6 @@ public class EditarPelicula extends AppCompatActivity {
         valoracion=findViewById(R.id.ep_rb_valoracion);
         descripcion=findViewById(R.id.ep_t_descripcion);
         actualizar=findViewById(R.id.ep_b_actualizar);
-        eliminar=findViewById(R.id.ep_b_eliminar);
 
         obtenerDatosIntent();
 

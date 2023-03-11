@@ -64,7 +64,7 @@
         <TextView
             android:id="@+id/lp_tv_descripcion"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="145dp"
             android:ellipsize="end"
             android:maxLines="8"
             android:paddingTop="10dp"

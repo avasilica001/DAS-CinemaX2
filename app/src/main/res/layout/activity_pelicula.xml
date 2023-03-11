@@ -5,88 +5,91 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="225dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/p_iv_portada"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/jaws" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_height="225dp"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/p_tv_titulo"
-                    android:layout_width="match_parent"
-                    android:layout_height="101dp"
-                    android:text="Título"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/p_tv_anio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Año"
-                    android:textSize="20dp" />
-
-                <RatingBar
-                    android:id="@+id/p_rb_valoracion"
-                    style="?android:attr/ratingBarStyleIndicator"
+                <ImageView
+                    android:id="@+id/p_iv_portada"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:numStars="5" />
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/jaws" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/p_tv_titulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="101dp"
+                        android:text="Título"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/p_tv_anio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Año"
+                        android:textSize="20dp" />
+
+                    <RatingBar
+                        android:id="@+id/p_rb_valoracion"
+                        style="?android:attr/ratingBarStyleIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5" />
+
+                </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/p_tv_descripcion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
+                android:paddingTop="10dp"
+                android:scrollbars="none"
+                android:text="Descripción" />
+
+            <Button
+                android:id="@+id/p_b_modificar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Modificar Película" />
+
+            <Button
+                android:id="@+id/p_b_borrar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Borrar Película" />
+
+            <Button
+                android:id="@+id/p_b_volver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Volver" />
+
         </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/p_tv_descripcion"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="10dp"
-            android:scrollbars="none"
-            android:text="Descripción" />
-
-        <Button
-            android:id="@+id/p_b_modificar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Modificar Película" />
-
-        <Button
-            android:id="@+id/p_b_borrar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Borrar Película" />
-
-        <Button
-            android:id="@+id/p_b_volver"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Volver" />
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
