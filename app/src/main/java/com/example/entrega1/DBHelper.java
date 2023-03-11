@@ -39,7 +39,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor leerPeliculasUsuario(String usuario){
         SQLiteDatabase db=this.getWritableDatabase();
         String sqldatos= "SELECT * FROM Peliculas WHERE subidapor=?";
-        //Toast.makeText(context,"usuario"+String.valueOf(usuario),Toast.LENGTH_SHORT).show();
         Cursor c=null;
         if (db != null){c= db.rawQuery(sqldatos,new String[]{String.valueOf(usuario)});}
         return c;
@@ -108,10 +107,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor buscarPelicula(String id){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
-        String sqlp= "SELECT * FROM Peliculas WHERE id=?";
+        String sqlp= "select * from Peliculas where id=?";
         Cursor c=null;
         if (db != null){
-            Toast.makeText(context,id, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,id, Toast.LENGTH_SHORT).show();
             c=db.rawQuery(sqlp,new String[]{id});
         }
         return c;

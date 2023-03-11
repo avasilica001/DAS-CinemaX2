@@ -65,9 +65,9 @@
         <TextView
             android:id="@+id/p_tv_descripcion"
             android:layout_width="match_parent"
-            android:layout_height="241dp"
+            android:layout_height="match_parent"
             android:paddingTop="10dp"
-            android:scrollbars="vertical"
+            android:scrollbars="none"
             android:text="Descripción" />
 
         <Button

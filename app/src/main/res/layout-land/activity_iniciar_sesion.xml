@@ -4,74 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AniadirPelicula">
+    tools:context=".IniciarSesion">
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:paddingLeft="15dp"
         android:paddingTop="15dp"
         android:paddingRight="15dp"
         android:paddingBottom="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/ep_tv_editarpelicula"
+            android:id="@+id/is_tv_iniciarsesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Añadir película"
+            android:text="Iniciar Sesión"
             android:textAlignment="center"
             android:textSize="30dp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/ep_t_nombre"
+            android:id="@+id/is_t_usuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Nombre"
+            android:hint="Nombre de usuario"
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/ep_t_anio"
+            android:id="@+id/is_t_contrasenia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Año"
-            android:inputType="textPersonName" />
-
-        <EditText
-            android:id="@+id/ep_t_portada"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="URL Portada"
-            android:inputType="textPersonName" />
-
-        <RatingBar
-            android:id="@+id/ep_rb_valoracion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:progressTint="#3F51B5"
-            android:rating="2.5" />
-
-        <EditText
-            android:id="@+id/ep_t_descripcion"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:ems="10"
-            android:hint="Descripción"
-            android:inputType="textMultiLine" />
+            android:hint="Contraseña"
+            android:inputType="textWebPassword" />
 
         <Button
-            android:id="@+id/ep_b_actualizar"
+            android:id="@+id/is_b_iniciarsesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Añadir" />
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Iniciar Sesión " />
+
+        <TextView
+            android:id="@+id/is_tv_registro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¿No estás registrado?"
+            android:textAlignment="center"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/is_b_registrarse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Registrarse" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

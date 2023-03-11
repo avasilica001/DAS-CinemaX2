@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+
 public class Pelicula extends AppCompatActivity {
 
     Activity activity=this;
@@ -110,11 +112,13 @@ public class Pelicula extends AppCompatActivity {
 
             Cursor c=db.buscarPelicula(s_id);
 
-            nombre.setText(c.getString(1));
-            anio.setText(String.valueOf(s_anio));
-            Glide.with(this).load(s_url).into(url);
-            valoracion.setRating(Float.parseFloat(s_valoracion));
-            descripcion.setText(String.valueOf(s_descripcion));
+            if(c.moveToFirst()){
+                nombre.setText(c.getString(1));
+                anio.setText(c.getString(2));
+                Glide.with(this).load(c.getString(3)).into(url);
+                valoracion.setRating(Float.parseFloat(c.getString(4)));
+                descripcion.setText(String.valueOf(c.getString(5)));
+            }
         }
         else{
             Toast.makeText(this,"No hay datos para mostrar", Toast.LENGTH_SHORT).show();
@@ -140,6 +144,13 @@ public class Pelicula extends AppCompatActivity {
             }
         });
         ad.create().show();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode==1){
+            recreate();
+        }
     }
 
 }
