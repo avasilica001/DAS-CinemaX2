@@ -16,7 +16,7 @@ public class EditarPelicula extends AppCompatActivity {
 
     EditText id, nombre, anio, url, descripcion;
     RatingBar valoracion;
-    Button actualizar,eliminar;
+    Button actualizar,volver;
 
     String s_id,s_titulo,s_anio, s_url, s_valoracion, s_descripcion;
 
@@ -31,6 +31,7 @@ public class EditarPelicula extends AppCompatActivity {
         valoracion=findViewById(R.id.ep_rb_valoracion);
         descripcion=findViewById(R.id.ep_t_descripcion);
         actualizar=findViewById(R.id.ep_b_actualizar);
+        volver=findViewById(R.id.ep_b_volver);
 
         obtenerDatosIntent();
 
@@ -44,6 +45,13 @@ public class EditarPelicula extends AppCompatActivity {
             public void onClick(View v) {
                 DBHelper db=new DBHelper(EditarPelicula.this);
                 db.modificarPelicula(s_id,nombre.getText().toString().trim(),Integer.valueOf(anio.getText().toString().trim()), url.getText().toString().trim(),valoracion.getRating(), descripcion.getText().toString().trim());
+                finish();
+            }
+        });
+
+        volver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });
