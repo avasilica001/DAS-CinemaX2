@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -14,12 +15,12 @@ import android.widget.Toast;
 
 public class EditarPelicula extends AppCompatActivity {
 
+    Context context=this;
     EditText id, nombre, anio, url, descripcion;
     RatingBar valoracion;
     Button actualizar,volver;
 
     String s_id,s_titulo,s_anio, s_url, s_valoracion, s_descripcion;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,15 +45,21 @@ public class EditarPelicula extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DBHelper db=new DBHelper(EditarPelicula.this);
-                db.modificarPelicula(s_id,nombre.getText().toString().trim(),Integer.valueOf(anio.getText().toString().trim()), url.getText().toString().trim(),valoracion.getRating(), descripcion.getText().toString().trim());
-                finish();
+
+                if(anio.getText().toString().trim().matches("[0-9]+") && anio.getText().toString().trim().length() == 4) {
+                    db.modificarPelicula(s_id, nombre.getText().toString().trim(), Integer.valueOf(anio.getText().toString().trim()), url.getText().toString().trim(), valoracion.getRating(), descripcion.getText().toString().trim());
+                    finish();
+                }
+                else{
+                    Toast.makeText(context, "Introduce un año válido. Ejemplo: 1915",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         volver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                volver();
             }
         });
     }
@@ -76,5 +83,29 @@ public class EditarPelicula extends AppCompatActivity {
         else{
             Toast.makeText(this,"No hay datos para mostrar", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void volver(){
+        AlertDialog.Builder ad=new AlertDialog.Builder(this);
+        ad.setTitle("Volver");
+        ad.setMessage("¿Estás seguro de que quieres volver? Perderás los datos no guardados.");
+        ad.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //no hace nada
+            }
+        });
+        ad.create().show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        volver();
     }
 }
