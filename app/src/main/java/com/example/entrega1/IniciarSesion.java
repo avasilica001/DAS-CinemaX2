@@ -131,9 +131,12 @@ public class IniciarSesion extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
 
-            b.setSmallIcon(android.R.drawable.stat_sys_warning)
+            b.setSmallIcon(android.R.drawable.btn_star_big_on)
                     .setContentTitle(s[0])
-                    .setContentText(s[1]);
+                    .setContentText(s[1])
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(s[1]));
+
             nm.notify(1, b.build());
         }
     }

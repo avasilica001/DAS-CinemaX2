@@ -45,9 +45,17 @@ public class Registro extends AppCompatActivity {
                     Toast.makeText(context, "Por favor introduce todos tus datos, serán obligatorios para el registro.", Toast.LENGTH_SHORT).show();
                 } else {
                     if (telefono.getText().toString().trim().matches("[0-9]+") && telefono.getText().toString().trim().length() == 9) {
-                        db.aniadirUsuario(usuario.getText().toString().trim(), contrasenia.getText().toString().trim(), email.getText().toString().trim(), Integer.valueOf(telefono.getText().toString().trim()), nombre.getText().toString().trim());
-                        crearNotificacion("¡Bienvenido!","Hola, " + usuario.getText().toString().trim() + ". Te damos las gracias por unirte a nosotros. No dudes en publicar las películas que has visto para darnos tu opinión.");
-                        finish();
+                        java.util.regex.Pattern rp=java.util.regex.Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$");
+                        java.util.regex.Matcher rm=rp.matcher(email.getText().toString().trim());
+
+                        if (rm.matches()){
+                            db.aniadirUsuario(usuario.getText().toString().trim(), contrasenia.getText().toString().trim(), email.getText().toString().trim(), Integer.valueOf(telefono.getText().toString().trim()), nombre.getText().toString().trim());
+                            crearNotificacion("¡Bienvenido!","Hola, " + usuario.getText().toString().trim() + ". Te damos las gracias por unirte a nosotros. No dudes en publicar las películas que has visto para darnos tu opinión.");
+                            finish();
+                        }
+                        else{
+                            Toast.makeText(context, "Por favor introduce un email válido.", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(context, "Por favor introduce un número de teléfono válido.", Toast.LENGTH_SHORT).show();
                     }
@@ -77,9 +85,11 @@ public class Registro extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
 
-            b.setSmallIcon(android.R.drawable.stat_sys_warning)
+            b.setSmallIcon(android.R.drawable.star_big_on)
                     .setContentTitle(titulo)
-                    .setContentText(contenido);
+                    .setContentText(contenido)
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(contenido));
             nm.notify(1, b.build());
         }
     }
