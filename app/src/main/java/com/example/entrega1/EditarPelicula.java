@@ -26,6 +26,8 @@ public class EditarPelicula extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_pelicula);
 
+        //se obtienen los elementos de la vista
+
         nombre=findViewById(R.id.ep_t_nombre);
         anio=findViewById(R.id.ep_t_anio);
         url=findViewById(R.id.ep_t_portada);
@@ -34,6 +36,7 @@ public class EditarPelicula extends AppCompatActivity {
         actualizar=findViewById(R.id.ep_b_actualizar);
         volver=findViewById(R.id.ep_b_volver);
 
+        //los datos que se han pasado por el intent al crear esta actividad ahora se guardan para usarse
         obtenerDatosIntent();
 
         ActionBar ab=getSupportActionBar();
@@ -44,7 +47,7 @@ public class EditarPelicula extends AppCompatActivity {
         actualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper db=new DBHelper(EditarPelicula.this);
+                DBCinemax db=new DBCinemax(EditarPelicula.this);
 
                 if(anio.getText().toString().trim().matches("[0-9]+") && anio.getText().toString().trim().length() == 4) {
                     db.modificarPelicula(s_id, nombre.getText().toString().trim(), Integer.valueOf(anio.getText().toString().trim()), url.getText().toString().trim(), valoracion.getRating(), descripcion.getText().toString().trim());
@@ -74,6 +77,7 @@ public class EditarPelicula extends AppCompatActivity {
             s_valoracion=getIntent().getStringExtra("valoracion");
             s_descripcion=getIntent().getStringExtra("descripcion");
 
+            //se visualizan los datos de la pelicula que se ha pulsadoen la actividad anterior
             nombre.setText(s_titulo);
             anio.setText(s_anio);
             url.setText(s_url);
@@ -81,29 +85,37 @@ public class EditarPelicula extends AppCompatActivity {
             descripcion.setText(s_descripcion);
         }
         else{
+            //si ha habido algún error se muestra el siguiente mensaje
+            //aunque no debería haberlo, ya que si la película se ha pulsado desde la actividad anterior y se ha abierto esta, es que existe la película y posee datos
             Toast.makeText(this,"No hay datos para mostrar", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void volver(){
+        //se pregunta al usario por si acaso que haya actualizado todos los datos
+        //para ello se usa un dialogo de confirmacion
         AlertDialog.Builder ad=new AlertDialog.Builder(this);
         ad.setTitle("Volver");
         ad.setMessage("¿Estás seguro de que quieres volver? Perderás los datos no guardados.");
         ad.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            //si el usuario ya ha guardado sus datos o no quiere hacerlo se vuelve a la actividad anterior
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
             }
         });
         ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            //si el usuario no está seguro nos mantenemos en esta actividad
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //no hace nada
             }
         });
+        //se enseña el dialogo
         ad.create().show();
     }
 
+    //se reescribe el método de pulsar el botón hacia atrás del propio teléfono para que también muestre el diálogo y sus posibles opciones
     @Override
     public void onBackPressed() {
         volver();

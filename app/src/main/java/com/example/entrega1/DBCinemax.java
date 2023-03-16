@@ -7,21 +7,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
-import java.sql.ResultSet;
-
-public class DBHelper extends SQLiteOpenHelper {
+public class DBCinemax extends SQLiteOpenHelper {
 
     private Context context;
+    //nombre de la bd
     private static final String DB_NAME= "CinemaX.db";
     private static final int DB_VERSION=1;
 
-    public DBHelper(Context context){
+    public DBCinemax(Context context){
         super(context,DB_NAME,null,DB_VERSION);
         this.context=context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        //se crean las tablas y los elementos que deben tener
         String sqlPeliculas="CREATE TABLE Peliculas(id INTEGER PRIMARY KEY AUTOINCREMENT,nombre VARCHAR,anio INTEGER, url VARCHAR, valoracion DOUBLE, descripcion VARCHAR, subidapor VARCHAR, FOREIGN KEY(subidapor) REFERENCES Usuario(id))";
         String sqlUsuarios="CREATE TABLE Usuarios(id VARCHAR PRIMARY KEY, contrasenia VARCHAR, correo VARCHAR, telefono INTEGER, nombreapellido VARCHAR)";
         db.execSQL(sqlUsuarios);
@@ -29,17 +29,21 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor leerPeliculasTodas(){
+        //se obtienen todas las peliculas de la bd
         SQLiteDatabase db=this.getWritableDatabase();
         String sqldatos= "SELECT * FROM Peliculas";
         Cursor c=null;
+        //si la bd esta vacia no hace falta realizar la consulta, se devuelve el cursor como null
         if (db != null){c= db.rawQuery(sqldatos,null);}
         return c;
     }
 
     public Cursor leerPeliculasUsuario(String usuario){
+        //se obtienen todas las peliculas subidas por el usuario que ha iniciado sesion
         SQLiteDatabase db=this.getWritableDatabase();
         String sqldatos= "SELECT * FROM Peliculas WHERE subidapor=?";
         Cursor c=null;
+        //si la bd eta vacia no hace falta realizar la consulta, se devuelve el cursor como null
         if (db != null){c= db.rawQuery(sqldatos,new String[]{String.valueOf(usuario)});}
         return c;
     }
@@ -48,12 +52,14 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=getWritableDatabase();
         ContentValues cv=new ContentValues();
 
+        //se añaden los elementos de la pelicula uno a uno
         cv.put("nombre", nombre);
         cv.put("anio",anio);
         cv.put("url",url);
         cv.put("valoracion",valoracion);
         cv.put("descripcion",descripcion);
         cv.put("subidapor",usuario);
+        //se hace la consulta y se manda un toast dependiendo si se ha podido añadir correctamente o no para notificar al usuario
         long r= db.insert("Peliculas",null,cv);
 
         if (r==-1){
@@ -69,12 +75,14 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
 
+        //se añaden los elementos del usuario uno a uno
         cv.put("id", usuario);
         cv.put("contrasenia", contrasenia);
         cv.put("correo", correo);
         cv.put("telefono", telefono);
         cv.put("nombreapellido", nombreapellido);
 
+        //se hace la consulta y se manda un toast dependiendo si se ha podido hacer correctamente el registro o no para notificar al usuario
         long r=db.insert("Usuarios",null,cv);
         if(r==-1){
             Toast.makeText(context,"No se ha podido registrar el usuario", Toast.LENGTH_SHORT).show();
@@ -88,12 +96,14 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
 
+        //se añaden los elementos de la pelicula para que se modifiquen
         cv.put("nombre", nombre);
         cv.put("anio",anio);
         cv.put("url",url);
         cv.put("valoracion",valoracion);
         cv.put("descripcion",descripcion);
 
+        //se hace la actualización y se manda un mensaje enseñando si se ha podido hacer o no
         long r=db.update("Peliculas",cv, "id=?", new String[]{id});
         if(r==-1){
             Toast.makeText(context,"No se ha podido actualizar la película", Toast.LENGTH_SHORT).show();
@@ -107,10 +117,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor buscarPelicula(String id){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
+
+        //se realiza la busqueda de una pelicula concreta por su id
         String sqlp= "select * from Peliculas where id=?";
         Cursor c=null;
+        //si la bd esta vacia se devuelve el cursor como null y no hace falta hacer la consulta
         if (db != null){
-            //Toast.makeText(context,id, Toast.LENGTH_SHORT).show();
             c=db.rawQuery(sqlp,new String[]{id});
         }
         return c;
@@ -120,6 +132,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
 
+        //se realiza la consulta y se notifica al usuario si ha sido correcta o no
         long r=db.delete("Peliculas","id=?",new String[]{id});
         if (r==-1){
             Toast.makeText(context,"No se ha podido borrar la película", Toast.LENGTH_SHORT).show();
@@ -130,7 +143,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    //no se si lo voy a usar de momento pero se queda
+    //método que todavía no se usa pero queda para futuras implementaciones
     public void eliminarUsuario(String idusuario){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
@@ -144,6 +157,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
 
+        //se busca el nombre de usuario en la base de datos, solo si la bd no esta vacia
         Cursor c=null;
         if (db != null){c= db.rawQuery("SELECT * FROM Usuarios WHERE id=?",new String[]{idusuario});
         }
@@ -154,14 +168,17 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
 
+        //se busca si hay algun usuario con ese nombre y esa contraseña
         Cursor c=null;
         if (db != null){c= db.rawQuery("SELECT * FROM Usuarios WHERE id=? AND contrasenia=?",new String[]{idusuario,contrasenia});
         }
         return c;
     }
+    //los metodos de existeUsuario y existeUsuarioContrasenia se utilizan (en vez de uno solo para mirar usuario y contraseña) para poder enviar distintos mensajes al suaurio por pantalla
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        //restauracion de la base de datos desde 0
         String sqlPeliculas="DROP TABLE IF EXISTS Peliculas";
         String sqlUsuarios="DROP TABLE IF EXISTS Usuarios ";
         db.execSQL(sqlPeliculas);

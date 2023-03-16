@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -20,8 +19,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final Activity activity=this;
 
-    DBHelper db=new DBHelper(MainActivity.this);
+    DBCinemax db=new DBCinemax(MainActivity.this);
 
+    //arraylist con las columnas de la tabla pelicula
     ArrayList<String> p_id=new ArrayList<>();
     ArrayList<String> p_nombre=new ArrayList<>();
     ArrayList<Integer> p_anio=new ArrayList<>();
@@ -39,32 +39,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //se guarda el id del usuario para usarse si hace falta ver sus propias peliculas
         s_id= getIntent().getStringExtra("id");
 
+        //setear la barra superior
         ActionBar ab=getSupportActionBar();
         ab.setTitle("Página principal");
 
+        //los arraylist se vacian porque si se pulsa continuamente los botones para obtener las películas solo se añadirían a la lista y se repetirian
         limpiarArrayLists();
+        //se len las peliculas una vez vacios lo arraylists y se guardan
         c=db.leerPeliculasTodas();
         guardarDatosArray();
 
+        //se crea el adaptar propio
         adapter=new ListaPeliculasAdapter(MainActivity.this, MainActivity.this, p_id, p_nombre, p_anio, p_url, p_valoracion, p_descripcion, p_subidapor,s_id);
         ListView l= (ListView) findViewById(R.id.lp_lv_listapeliculas);
         l.setAdapter(adapter);
 
+        //cuando se modifican datos notificar para que actualice
         adapter.notifyDataSetChanged();
 
+        //boton para añadir una nueva pelicula a la lista
         Button botonaniadir= (Button) findViewById(R.id.lp_b_aniadirpelicula);
         botonaniadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //se necesita el id para guardar quien ha subido la pelicula
                 Intent intent=new Intent(MainActivity.this, AniadirPelicula.class);
                 intent.putExtra("id",s_id);
                 activity.startActivityForResult(intent, 1);
-                //MainActivity.this.startActivity(intent);
             }
         });
 
+        //ver todas las peliculas
         Button ptodas=findViewById(R.id.lp_b_todas);
         ptodas.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //ver solo las peliculas del usuario logeado
         Button pusuario=findViewById(R.id.lp_b_deusuario);
         pusuario.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //refrescar cuando se vuelve a la actividad main por si se ha añadido una película nueva, pàra que esta aparezca
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode==1){
@@ -87,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //se toman los datos de la bd y se guardan en los arraylist
     public void guardarDatosArray(){
         if (c.getCount()==0){
             Toast.makeText(this,"No hay películas para mostrar",Toast.LENGTH_SHORT).show();
@@ -104,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //vaciar elementos de los arraylists
     public void limpiarArrayLists(){
         p_id.clear();
         p_nombre.clear();
@@ -114,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         p_subidapor.clear();
     }
 
+    //hacer que se vea en el listview todas las peliculas
     public void actualizarPeliculasTodas(){
         limpiarArrayLists();
         c=db.leerPeliculasTodas();
@@ -121,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    //hacer que se vea en el listview solo las peliculas del usuario
     public void actualizarPeliculasUsuario(){
         limpiarArrayLists();
         c=db.leerPeliculasUsuario(s_id);
