@@ -62,7 +62,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".PaginaPrincipal"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

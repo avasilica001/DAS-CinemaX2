@@ -15,11 +15,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class PaginaPrincipal extends AppCompatActivity {
 
     private final Activity activity=this;
 
-    DBCinemax db=new DBCinemax(MainActivity.this);
+    DBCinemax db=new DBCinemax(PaginaPrincipal.this);
 
     //arraylist con las columnas de la tabla pelicula
     ArrayList<String> p_id=new ArrayList<>();
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         guardarDatosArray();
 
         //se crea el adaptar propio
-        adapter=new ListaPeliculasAdapter(MainActivity.this, MainActivity.this, p_id, p_nombre, p_anio, p_url, p_valoracion, p_descripcion, p_subidapor,s_id);
+        adapter=new ListaPeliculasAdapter(PaginaPrincipal.this, PaginaPrincipal.this, p_id, p_nombre, p_anio, p_url, p_valoracion, p_descripcion, p_subidapor,s_id);
         ListView l= (ListView) findViewById(R.id.lp_lv_listapeliculas);
         l.setAdapter(adapter);
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //se necesita el id para guardar quien ha subido la pelicula
-                Intent intent=new Intent(MainActivity.this, AniadirPelicula.class);
+                Intent intent=new Intent(PaginaPrincipal.this, AniadirPelicula.class);
                 intent.putExtra("id",s_id);
                 activity.startActivityForResult(intent, 1);
             }

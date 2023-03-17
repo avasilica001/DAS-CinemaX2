@@ -77,12 +77,6 @@ public class ListaPeliculasAdapter extends ArrayAdapter<String> {
                 //se pasan todos los datos para ver la pelicula
                 Intent intent = new Intent(context, Pelicula.class);
                 intent.putExtra("id", String.valueOf(ids.get(p)));
-                intent.putExtra("titulo", String.valueOf(titulos.get(p)));
-                intent.putExtra("anio", String.valueOf(anios.get(p)));
-                intent.putExtra("url", String.valueOf(urls.get(p)));
-                intent.putExtra("valoracion", String.valueOf(valoraciones.get(p)));
-                intent.putExtra("descripcion", String.valueOf(descripciones.get(p)));
-                intent.putExtra("subidapor", String.valueOf(subidaspor.get(p)));
                 intent.putExtra("usuario", usuario);
                 activity.startActivityForResult(intent, 1);
             }

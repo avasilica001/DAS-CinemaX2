@@ -50,17 +50,30 @@ public class Pelicula extends AppCompatActivity {
         volver=findViewById(R.id.p_b_volver);
 
         //se cogen los datos de la pelicula que ha sido pulsada pasados por el intent
-        obtenerDatosIntent();
+
+        s_id= getIntent().getStringExtra("id");
+        usuario=getIntent().getStringExtra("usuario");
+
+        Cursor c=db.buscarPelicula(s_id);
+
+        if(c.moveToFirst()){
+            //se setean los datos de la pelicula para que no haga falta introducirçtodo de nuevo si solo se quiere modificar un elemento
+            nombre.setText(c.getString(1));
+            anio.setText(c.getString(2));
+            Glide.with(this).load(c.getString(3)).into(url);
+            valoracion.setRating(Float.parseFloat(c.getString(4)));
+            descripcion.setText(String.valueOf(c.getString(5)));
+        }
 
         //setear el titulo para que sea la pelicula
         ActionBar ab=getSupportActionBar();
         if (ab !=null){
-            ab.setTitle(s_titulo);
+            ab.setTitle(getIntent().getStringExtra("titulo"));
         }
 
         //si la pelicula está subida por el usuario, se puede modificar o eliminar
         //si no es del usuario solo se puede ver o volver
-        if (s_subidapor.equals(usuario)){
+        if (c.getString(6).equals(usuario)){
             actualizar.setVisibility(View.VISIBLE);
             eliminar.setVisibility(View.VISIBLE);
         }
@@ -75,13 +88,13 @@ public class Pelicula extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Pelicula.this, EditarPelicula.class);
-                intent.putExtra("id", s_id);
-                intent.putExtra("titulo", s_titulo);
-                intent.putExtra("anio", s_anio);
-                intent.putExtra("url", s_url);
-                intent.putExtra("valoracion", s_valoracion);
-                intent.putExtra("descripcion", s_descripcion);
-                intent.putExtra("subidapor", s_subidapor);
+                intent.putExtra("id", c.getString(0));
+                intent.putExtra("titulo", c.getString(1));
+                intent.putExtra("anio", c.getString(2));
+                intent.putExtra("url", c.getString(3));
+                intent.putExtra("valoracion", c.getString(4));
+                intent.putExtra("descripcion", c.getString(5));
+                intent.putExtra("subidapor", c.getString(6));
                 activity.startActivityForResult(intent, 1);
             }
         });
@@ -102,37 +115,6 @@ public class Pelicula extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void obtenerDatosIntent(){
-        //si hay elementos en el intent (que deberia) se pasan a strings
-        if(getIntent().hasExtra("id") && getIntent().hasExtra("titulo") && getIntent().hasExtra("anio") && getIntent().hasExtra("url") && getIntent().hasExtra("valoracion") && getIntent().hasExtra("descripcion") ){
-            s_id= getIntent().getStringExtra("id");
-            s_titulo=getIntent().getStringExtra("titulo");
-            s_anio=getIntent().getStringExtra("anio");
-            s_url=getIntent().getStringExtra("url");
-            s_valoracion=getIntent().getStringExtra("valoracion");
-            s_descripcion=getIntent().getStringExtra("descripcion");
-            s_subidapor=getIntent().getStringExtra("subidapor");
-            usuario=getIntent().getStringExtra("usuario");
-
-            //se busca la pelicula en la bd por el id
-            Cursor c=db.buscarPelicula(s_id);
-
-            //si se ha encontrado la pelicula (debería porque si se ha pulsado desde la main activity y eso quiere decir que existe)
-            if(c.moveToFirst()){
-                //se setean los datos de la pelicula para que no haga falta introducirçtodo de nuevo si solo se quiere modificar un elemento
-                nombre.setText(c.getString(1));
-                anio.setText(c.getString(2));
-                Glide.with(this).load(c.getString(3)).into(url);
-                valoracion.setRating(Float.parseFloat(c.getString(4)));
-                descripcion.setText(String.valueOf(c.getString(5)));
-            }
-        }
-        else{
-            //si ha habido algun error se muestra un mensaje
-            Toast.makeText(this,"No hay datos para mostrar", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void confirmarBorrar(){

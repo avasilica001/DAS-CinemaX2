@@ -68,11 +68,11 @@ public class IniciarSesion extends AppCompatActivity {
                         } else {
                             //si todos los datos introducidos son correctos, es decir, se ha encontrado un usuario con esa contraseña
                             //se realiza el inicio de sesion a la aplicacion
-                            Intent intent = new Intent(IniciarSesion.this, MainActivity.class);
+                            Intent intent = new Intent(IniciarSesion.this, PaginaPrincipal.class);
                             intent.putExtra("id", usuario.getText().toString().trim());
                             IniciarSesion.this.startActivity(intent);
                             //se manda una notificación aleatoria de las posibles cmo un tutorial para el usuario
-                            notificacionaleatoria();
+                            notificacionAleatoria();
                             finish();
                         }
                     }
@@ -98,7 +98,7 @@ public class IniciarSesion extends AppCompatActivity {
         }
     }
 
-    public void notificacionaleatoria(){
+    public void notificacionAleatoria(){
         //obtenemos la lista, que es un txt con 10 líneas
         //cada una frases para notificación
         InputStream f=context.getResources().openRawResource(R.raw.listanotificaciones);

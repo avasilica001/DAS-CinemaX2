@@ -10,6 +10,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -58,10 +59,17 @@ public class Registro extends AppCompatActivity {
 
                         //si el email es valido (ej: cinemax@gmail.com)
                         if (rm.matches()){
-                            //ya contodo correcto se añade al usuario
-                            db.aniadirUsuario(usuario.getText().toString().trim(), contrasenia.getText().toString().trim(), email.getText().toString().trim(), Integer.valueOf(telefono.getText().toString().trim()), nombre.getText().toString().trim());
-                            crearNotificacion("¡Bienvenido!","Hola, " + usuario.getText().toString().trim() + ". Te damos las gracias por unirte a nosotros. No dudes en publicar las películas que has visto para darnos tu opinión.");
-                            finish();
+                            //se mira si el usuario con ese nombre ya existe
+                            Cursor c=db.existeUsuario(usuario.getText().toString().trim());
+                            //si no existe se crea
+                            if(c.getCount() == 0){
+                                db.aniadirUsuario(usuario.getText().toString().trim(), contrasenia.getText().toString().trim(), email.getText().toString().trim(), Integer.valueOf(telefono.getText().toString().trim()), nombre.getText().toString().trim());
+                                crearNotificacion("¡Bienvenido!","Hola, " + usuario.getText().toString().trim() + ". Te damos las gracias por unirte a nosotros. No dudes en publicar las películas que has visto para darnos tu opinión.");
+                                finish();
+                            }
+                            else{
+                                Toast.makeText(context, "Este nombre de usuario ya está en uso.", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         else{
                             //mensaje para email incorrecto
