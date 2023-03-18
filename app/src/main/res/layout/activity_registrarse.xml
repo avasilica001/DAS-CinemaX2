@@ -25,7 +25,8 @@
                 android:layout_height="wrap_content"
                 android:text="Registrarse"
                 android:textAlignment="center"
-                android:textSize="30dp" />
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/r_t_nombrecompleto"
