@@ -33,14 +33,20 @@ public class AniadirPelicula extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DBCinemax db=new DBCinemax(AniadirPelicula.this);
-                //si el año introducido es correcto (ej: 1994,2003) se añade a la bd
-                if(anio.getText().toString().trim().matches("[0-9]+") && anio.getText().toString().trim().length() == 4) {
-                    db.aniadirPelicula(titulo.getText().toString().trim(),Integer.valueOf(anio.getText().toString().trim()),url.getText().toString().trim(),valoracion.getRating(),descripcion.getText().toString().trim(),getIntent().getStringExtra("id"));
-                    finish();
+
+                if (titulo.getText().toString().trim().equals("") || anio.getText().toString().trim().equals("") || url.getText().toString().trim().equals("")  || valoracion.toString().trim().equals("") || descripcion.getText().toString().trim().equals("")) {
+                    Toast.makeText(context, "Rellena todos los campos",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    //si no se da una pista de como deberia representarse el año
-                    Toast.makeText(context, "Introduce un año válido. Ejemplo: 1915",Toast.LENGTH_SHORT).show();
+                    //si el año introducido es correcto (ej: 1994,2003) se añade a la bd
+                    if(anio.getText().toString().trim().matches("[0-9]+") && anio.getText().toString().trim().length() == 4) {
+                        db.aniadirPelicula(titulo.getText().toString().trim(),Integer.valueOf(anio.getText().toString().trim()),url.getText().toString().trim(),valoracion.getRating(),descripcion.getText().toString().trim(),getIntent().getStringExtra("id"));
+                        finish();
+                    }
+                    else{
+                        //si no se da una pista de como deberia representarse el año
+                        Toast.makeText(context, "Introduce un año válido. Ejemplo: 1915",Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }

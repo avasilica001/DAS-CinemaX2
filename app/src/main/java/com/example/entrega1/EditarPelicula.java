@@ -49,12 +49,18 @@ public class EditarPelicula extends AppCompatActivity {
             public void onClick(View v) {
                 DBCinemax db=new DBCinemax(EditarPelicula.this);
 
-                if(anio.getText().toString().trim().matches("[0-9]+") && anio.getText().toString().trim().length() == 4) {
-                    db.modificarPelicula(s_id, nombre.getText().toString().trim(), Integer.valueOf(anio.getText().toString().trim()), url.getText().toString().trim(), valoracion.getRating(), descripcion.getText().toString().trim());
-                    finish();
+                if (nombre.getText().toString().trim().equals("") || anio.getText().toString().trim().equals("")|| url.getText().toString().trim().equals("") || valoracion.toString().trim().equals("") || descripcion.getText().toString().trim().equals("")) {
+                    Toast.makeText(context, "Rellena todos los campos",Toast.LENGTH_SHORT).show();
+
                 }
                 else{
-                    Toast.makeText(context, "Introduce un año válido. Ejemplo: 1915",Toast.LENGTH_SHORT).show();
+                    if(anio.getText().toString().trim().matches("[0-9]+") && anio.getText().toString().trim().length() == 4) {
+                        db.modificarPelicula(s_id, nombre.getText().toString().trim(), Integer.valueOf(anio.getText().toString().trim()), url.getText().toString().trim(), valoracion.getRating(), descripcion.getText().toString().trim());
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(context, "Introduce un año válido. Ejemplo: 1915",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

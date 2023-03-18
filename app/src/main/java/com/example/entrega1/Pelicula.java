@@ -31,7 +31,7 @@ public class Pelicula extends AppCompatActivity {
 
     Button actualizar,eliminar,volver;
 
-    String s_id,s_titulo,s_anio, s_url, s_valoracion, s_descripcion, s_subidapor, usuario;
+    String s_id,usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class Pelicula extends AppCompatActivity {
         //setear el titulo para que sea la pelicula
         ActionBar ab=getSupportActionBar();
         if (ab !=null){
-            ab.setTitle(getIntent().getStringExtra("titulo"));
+            ab.setTitle(c.getString(1));
         }
 
         //si la pelicula está subida por el usuario, se puede modificar o eliminar

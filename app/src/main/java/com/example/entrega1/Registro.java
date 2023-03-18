@@ -64,7 +64,7 @@ public class Registro extends AppCompatActivity {
                             //si no existe se crea
                             if(c.getCount() == 0){
                                 db.aniadirUsuario(usuario.getText().toString().trim(), contrasenia.getText().toString().trim(), email.getText().toString().trim(), Integer.valueOf(telefono.getText().toString().trim()), nombre.getText().toString().trim());
-                                crearNotificacion("¡Bienvenido!","Hola, " + usuario.getText().toString().trim() + ". Te damos las gracias por unirte a nosotros. No dudes en publicar las películas que has visto para darnos tu opinión.");
+                                crearNotificacion("¡Bienvenido!","Hola, " + nombre.getText().toString().trim() + ". Te damos las gracias por unirte a nosotros. No dudes en publicar las películas que has visto para darnos tu opinión.");
                                 finish();
                             }
                             else{

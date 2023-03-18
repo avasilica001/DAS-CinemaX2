@@ -41,7 +41,7 @@
                     android:id="@+id/lp_tv_titulo"
                     android:layout_width="match_parent"
                     android:layout_height="84dp"
-                    android:text="TextView"
+                    android:text="Título"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
