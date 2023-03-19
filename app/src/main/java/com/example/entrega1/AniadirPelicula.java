@@ -39,6 +39,12 @@ public class AniadirPelicula extends AppCompatActivity {
                 }
                 else{
                     //si el año introducido es correcto (ej: 1994,2003) se añade a la bd
+
+                    /*Basado en el código extraído de Stack Overflow
+                     Pregunta: https://stackoverflow.com/questions/5439529/determine-if-a-string-is-an-integer-in-java
+                     Respuesta: https://stackoverflow.com/posts/5439600/revisions
+                     Modificado para verificar que se trata de un integer de 4 cifras
+                     */
                     if(anio.getText().toString().trim().matches("[0-9]+") && anio.getText().toString().trim().length() == 4) {
                         db.aniadirPelicula(titulo.getText().toString().trim(),Integer.valueOf(anio.getText().toString().trim()),url.getText().toString().trim(),valoracion.getRating(),descripcion.getText().toString().trim(),getIntent().getStringExtra("id"));
                         finish();

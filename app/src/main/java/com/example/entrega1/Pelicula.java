@@ -118,6 +118,9 @@ public class Pelicula extends AppCompatActivity {
     }
 
     private void confirmarBorrar(){
+
+        //el cogido pertenece a las diapositivas de la asignatura sobre dialogos
+
         //dialogo para confirmar que se quiere borrar la pelicula
         AlertDialog.Builder ad=new AlertDialog.Builder(this);
         ad.setTitle("Eliminar "+nombre.getText().toString().trim());

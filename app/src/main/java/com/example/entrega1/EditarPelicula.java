@@ -54,6 +54,11 @@ public class EditarPelicula extends AppCompatActivity {
 
                 }
                 else{
+                    /*Basado en el código extraído de Stack Overflow
+                     Pregunta: https://stackoverflow.com/questions/5439529/determine-if-a-string-is-an-integer-in-java
+                     Respuesta: https://stackoverflow.com/posts/5439600/revisions
+                     Modificado para verificar que se trata de un integer de 4 cifras
+                     */
                     if(anio.getText().toString().trim().matches("[0-9]+") && anio.getText().toString().trim().length() == 4) {
                         db.modificarPelicula(s_id, nombre.getText().toString().trim(), Integer.valueOf(anio.getText().toString().trim()), url.getText().toString().trim(), valoracion.getRating(), descripcion.getText().toString().trim());
                         finish();
@@ -100,6 +105,8 @@ public class EditarPelicula extends AppCompatActivity {
     private void volver(){
         //se pregunta al usario por si acaso que haya actualizado todos los datos
         //para ello se usa un dialogo de confirmacion
+
+        //codigo basado en las diapositivas de la asignatura, apartado de diálogos
         AlertDialog.Builder ad=new AlertDialog.Builder(this);
         ad.setTitle("Volver");
         ad.setMessage("¿Estás seguro de que quieres volver? Perderás los datos no guardados.");

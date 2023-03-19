@@ -52,7 +52,19 @@ public class Registro extends AppCompatActivity {
                 } else {
                     //si no hay campos vacios seguimos
                     //si el telefono es correcto (ej: 666666666, 999999999) se sigue
+
+                    /*Basado en el código extraído de Stack Overflow
+                     Pregunta: https://stackoverflow.com/questions/5439529/determine-if-a-string-is-an-integer-in-java
+                     Respuesta: https://stackoverflow.com/posts/5439600/revisions
+                     Modificado para verificar que se trata de un integer de 9 cifras
+                     */
                     if (telefono.getText().toString().trim().matches("[0-9]+") && telefono.getText().toString().trim().length() == 9) {
+
+                        /*Basado en el código extraído de Stack Overflow
+                     Pregunta: https://stackoverflow.com/questions/624581/what-is-the-best-java-email-address-validation-method
+                     Respuesta: https://stackoverflow.com/posts/16058059/revisions
+                     */
+
                         //si el telefono es correcto miramos si el email es valido mediante regex
                         java.util.regex.Pattern rp=java.util.regex.Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$");
                         java.util.regex.Matcher rm=rp.matcher(email.getText().toString().trim());
@@ -85,6 +97,8 @@ public class Registro extends AppCompatActivity {
     }
 
     private void crearNotificacion(String titulo, String contenido) {
+
+        //el codigo ha sido tomado de las diapositivas de la asignatura sobre notificaciones
         //Para la api 33 hay que pedir permisos
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {

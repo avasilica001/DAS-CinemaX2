@@ -111,6 +111,8 @@ public class IniciarSesion extends AppCompatActivity {
     public void notificacionAleatoria(){
         //obtenemos la lista, que es un txt con 10 líneas
         //cada una frases para notificación
+
+        //codigo tomado de las diapositivas de la asignatura, apartado de manejo de ficheros internos
         InputStream f=context.getResources().openRawResource(R.raw.listanotificaciones);
         BufferedReader br=new BufferedReader(new InputStreamReader(f));
         try {
@@ -126,11 +128,20 @@ public class IniciarSesion extends AppCompatActivity {
         }
 
         //obtenemos un número aleatorio entre 0 y 9 para coger un elemento del array (una línea del txt)
+
+        /*Basado en el código extraído de Stack Overflow
+         Pregunta: https://stackoverflow.com/questions/5887709/getting-random-numbers-in-java
+         Respuesta: https://stackoverflow.com/posts/5887745/revisions
+         Modificado para obtener un numero aleatorio entre 0 y 9
+         */
+
         int n=0 + (int)(Math.random() * ((9 - 0) + 1));
 
         //se separa la línea el array mediante el -
         //para obtener titulo notificacion-descripcion notificacion
         String[] s=lineas.get(n).split("-");
+
+        //codigo obtenido de las diapositivas de la asignatura sobre notificaciones
 
         //Para la api 33 hay que pedir permisos para emitir notificaciones
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
