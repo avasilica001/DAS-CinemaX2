@@ -38,6 +38,10 @@ public class IniciarSesion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iniciar_sesion);
 
+        DBCinemax db=new DBCinemax(IniciarSesion.this);
+        //no se utiliza pero se hace para que se cree la bd la primera vez
+        db.eliminarPelicula(String.valueOf(-1));
+
         //se setea para que se pueda ver como título el nombre de la aplicación
         ActionBar ab=getSupportActionBar();
         ab.setTitle("CinemaX");
@@ -51,7 +55,6 @@ public class IniciarSesion extends AppCompatActivity {
         iniciars.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBCinemax db=new DBCinemax(IniciarSesion.this);
                 //si alguno de los campos es distinto del vacio
                 if(!usuario.getText().toString().trim().equals("") || !contrasenia.getText().toString().trim().equals("")) {
                     //se mira si existe alguien con ese usuario y se guarda en un cursor
@@ -66,6 +69,13 @@ public class IniciarSesion extends AppCompatActivity {
                             //si la contraseña del usuario que ya existe no coincide se manda mensaje
                             Toast.makeText(context, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                         } else {
+                            //una vez iniciada la bd se añaden los datos por defecto
+                            //el usuario admin se prevee para no utilizarse todavia en esta entrega asi que no debería dar problemas
+                            if (db.existeUsuario("admin").getCount()==0){
+                                db.aniadirUsuario("admin", "admin", "admin@cinemax.com", 900000000, "Admin CinemaX");
+                                db.aniadirPelicula("Todo en Todas Partes al Mismo Tiempo", 2022, "https://upload.wikimedia.org/wikipedia/en/1/1e/Everything_Everywhere_All_at_Once.jpg", 4.5f, "Cuando una ruptura interdimensional altera la realidad, Evelyn (Michelle Yeoh), una inmigrante china en Estados Unidos, se ve envuelta en una aventura salvaje en la que solo ella puede salvar el mundo. Perdida en los mundos infinitos del multiverso, esta heroína inesperada debe canalizar sus nuevos poderes para luchar contra los extraños y desconcertantes peligros del multiverso mientras el destino del mundo pende de un hilo.", "admin");
+                                db.aniadirPelicula("Avatar: El Sentido del Agua", 2022, "https://imageio.forbes.com/specials-images/imageserve/639e09798e6da4e16a8cea7f/0x0.jpg?format=jpg&width=1200", 2.0f, "6 años después de que los Na'vi repelieran la primera invasión humana de Pandora, Jake Sully vive como jefe del clan Omaticaya y forma una familia con Neytiri, que incluye a sus hijos, Neteyam y Lo'ak; su hija biológica, Tuk; su hija adoptiva, Kiri (nacida del avatar Na'vi inerte de Grace Augustine); y un niño humano llamado Spider, hijo del coronel Miles Quaritch, que nació en Pandora y no pudo ser transportado a la Tierra en criostasis debido a su corta edad. Para consternación de los Na'vi, los humanos regresan y después de destruir unas hectáreas de selvas de Pandora con unos cañones de plasma, construyen unas nuevas bases incluyendo la base principal y de operaciones llamada \"Ciudad Cabeza de Puente\" qué está preparando a Pandora para ser colonizada por los humanos, ya que la Tierra agoniza. Entre los recién llegados hay recombinantes, avatares Na'vi con las mentes y recuerdos de marines fallecidos de la RDA, con el recombinante de Quaritch como líder.", "admin");
+                            }
                             //si todos los datos introducidos son correctos, es decir, se ha encontrado un usuario con esa contraseña
                             //se realiza el inicio de sesion a la aplicacion
                             Intent intent = new Intent(IniciarSesion.this, PaginaPrincipal.class);

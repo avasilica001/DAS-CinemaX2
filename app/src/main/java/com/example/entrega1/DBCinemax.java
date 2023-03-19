@@ -22,11 +22,11 @@ public class DBCinemax extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //se crean las tablas y los elementos que deben tener
-        String sqlPeliculas="CREATE TABLE Peliculas(id INTEGER PRIMARY KEY AUTOINCREMENT,nombre VARCHAR,anio INTEGER, url VARCHAR, valoracion DOUBLE, descripcion VARCHAR, subidapor VARCHAR, FOREIGN KEY(subidapor) REFERENCES Usuario(id))";
-        String sqlUsuarios="CREATE TABLE Usuarios(id VARCHAR PRIMARY KEY, contrasenia VARCHAR, correo VARCHAR, telefono INTEGER, nombreapellido VARCHAR)";
+        String sqlPeliculas = "CREATE TABLE Peliculas(id INTEGER PRIMARY KEY AUTOINCREMENT,nombre VARCHAR,anio INTEGER, url VARCHAR, valoracion DOUBLE, descripcion VARCHAR, subidapor VARCHAR, FOREIGN KEY(subidapor) REFERENCES Usuario(id))";
+        String sqlUsuarios = "CREATE TABLE Usuarios(id VARCHAR PRIMARY KEY, contrasenia VARCHAR, correo VARCHAR, telefono INTEGER, nombreapellido VARCHAR)";
         db.execSQL(sqlUsuarios);
         db.execSQL(sqlPeliculas);
-    }
+        }
 
     public Cursor leerPeliculasTodas(){
         //se obtienen todas las peliculas de la bd
@@ -61,13 +61,6 @@ public class DBCinemax extends SQLiteOpenHelper {
         cv.put("subidapor",usuario);
         //se hace la consulta y se manda un toast dependiendo si se ha podido añadir correctamente o no para notificar al usuario
         long r= db.insert("Peliculas",null,cv);
-
-        if (r==-1){
-            Toast.makeText(context,"No se ha podido añadir la película", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(context,"Se ha añadido la película", Toast.LENGTH_SHORT).show();
-        }
         db.close();
     }
 
@@ -84,12 +77,6 @@ public class DBCinemax extends SQLiteOpenHelper {
 
         //se hace la consulta y se manda un toast dependiendo si se ha podido hacer correctamente el registro o no para notificar al usuario
         long r=db.insert("Usuarios",null,cv);
-        if(r==-1){
-            Toast.makeText(context,"No se ha podido registrar el usuario", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(context,"Usuario registrado", Toast.LENGTH_SHORT).show();
-        }
     }
 
     public void modificarPelicula(String id, String nombre, Integer anio, String url, Float valoracion, String descripcion){
@@ -134,11 +121,13 @@ public class DBCinemax extends SQLiteOpenHelper {
 
         //se realiza la consulta y se notifica al usuario si ha sido correcta o no
         long r=db.delete("Peliculas","id=?",new String[]{id});
-        if (r==-1){
-            Toast.makeText(context,"No se ha podido borrar la película", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(context,"Película borrada", Toast.LENGTH_SHORT).show();
+        if (id!=String.valueOf(-1)){
+            if (r==-1){
+                Toast.makeText(context,"No se ha podido borrar la película", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(context,"Película borrada", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
