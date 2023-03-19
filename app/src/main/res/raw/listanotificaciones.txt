@@ -1,0 +1,10 @@
+Añade una película-¿Has probado a añadir una película para que el resto de usuarios puedan verla?
+Échales un vistazo a las películas-Otros usuarios han añadido películas nuevas, prueba a echarles un vistazo
+Echa un vistazo a tus propias películas-Así podrás tener en cuenta las películas que has ido subiendo a lo largo del tiempo
+Elimina una películas-¿Has probado a eliminar una película? Quizá no te haya gustado cómo la has descrito, prueba a hacerlo
+Modifica una película-Si te has equivocado con los datos de alguna película que hayas subido, siempre puedes editarla pulsando sobre ella y eligiendo "modificar"
+Películas de otros usuarios-¿Te has dado cuenta de que no puedes modificar las películas de otros usuarios? Eso es porque no sería justo para los demás
+Valoración de tus películas-Esperamos que no te hayas olvidado de darles una puntuación certera a las películas que has añadido
+Tu lista de películas es pequeña-Prueba a añadir una película
+Los demás usuarios no han añadido películas nuevas-Anímate tú a añadir nuevas películas para aumentar nuestro catálogo
+Películas anónimas-Solo tú sabrás cuales son tus películas
