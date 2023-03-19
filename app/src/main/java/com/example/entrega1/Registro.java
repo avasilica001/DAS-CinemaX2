@@ -98,7 +98,7 @@ public class Registro extends AppCompatActivity {
         // Para api oreo o mayores es necesario
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            NotificationChannel channel = new NotificationChannel("idc", "canal", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("IdCanal", "canal", NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription("canalNotificaciones");
             // Register the channel with the system. You can't change the importance
             // or other notification behaviors after this.
