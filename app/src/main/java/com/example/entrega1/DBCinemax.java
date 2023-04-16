@@ -22,8 +22,8 @@ public class DBCinemax extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //se crean las tablas y los elementos que deben tener
-        String sqlPeliculas = "CREATE TABLE Peliculas(id INTEGER PRIMARY KEY AUTOINCREMENT,nombre VARCHAR,anio INTEGER, url VARCHAR, valoracion DOUBLE, descripcion VARCHAR, subidapor VARCHAR, FOREIGN KEY(subidapor) REFERENCES Usuario(id))";
-        String sqlUsuarios = "CREATE TABLE Usuarios(id VARCHAR PRIMARY KEY, contrasenia VARCHAR, correo VARCHAR, telefono INTEGER, nombreapellido VARCHAR)";
+        String sqlPeliculas = "CREATE TABLE Peliculas(id INTEGER PRIMARY KEY AUTOINCREMENT,nombre VARCHAR,anio INTEGER, url VARCHAR, valoracion DOUBLE, descripcion VARCHAR, subidapor VARCHAR, fotoperfil LONGBLOB, FOREIGN KEY(subidapor) REFERENCES Usuario(id))";
+        String sqlUsuarios = "CREATE TABLE Usuarios(id VARCHAR PRIMARY KEY, contrasenia VARCHAR, correo VARCHAR, telefono INTEGER, nombreapellido VARCHAR, fotoperfil LONGBLOB)";
         db.execSQL(sqlUsuarios);
         db.execSQL(sqlPeliculas);
         }
@@ -64,7 +64,7 @@ public class DBCinemax extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void aniadirUsuario(String usuario, String contrasenia, String correo, Integer telefono, String nombreapellido){
+    public void aniadirUsuario(String usuario, String contrasenia, String correo, Integer telefono, String nombreapellido, byte[] fotoperfil){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
 
@@ -74,7 +74,7 @@ public class DBCinemax extends SQLiteOpenHelper {
         cv.put("correo", correo);
         cv.put("telefono", telefono);
         cv.put("nombreapellido", nombreapellido);
-
+        cv.put("fotoperfil",fotoperfil);
         //se hace la consulta y se manda un toast dependiendo si se ha podido hacer correctamente el registro o no para notificar al usuario
         long r=db.insert("Usuarios",null,cv);
     }

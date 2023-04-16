@@ -71,6 +71,30 @@
                 android:scrollbars="none"
                 android:text="Descripción" />
 
+            <TextView
+                android:id="@+id/p_p_subidapor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Película subida por:"
+                android:textAlignment="center"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/p_iv_fotoperfil"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/p_p_usuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="usuario"
+                android:textAlignment="center"
+                android:textSize="15dp"
+                android:textStyle="normal" />
+
             <Button
                 android:id="@+id/p_b_modificar"
                 android:layout_width="match_parent"

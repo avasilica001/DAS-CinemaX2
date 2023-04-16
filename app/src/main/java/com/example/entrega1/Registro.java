@@ -1,27 +1,50 @@
 package com.example.entrega1;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Registro extends AppCompatActivity {
 
-    Context context = this;
-    EditText nombre, usuario, email, telefono, contrasenia;
+    private Context context = this;
+    private Activity activity=this;
+    private EditText nombre, usuario, email, telefono, contrasenia;
+    private ImageView vistaimagen;
+    private Uri imagen;
+    private Bitmap bimagen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +61,57 @@ public class Registro extends AppCompatActivity {
         contrasenia = findViewById(R.id.r_t_contrasenia);
         email = findViewById(R.id.r_t_email);
         telefono = findViewById(R.id.r_t_telefono);
+        vistaimagen = findViewById(R.id.r_iv_previafoto);
+
+        //boton elegir imagen de la galeria
+        Button elegirfoto=findViewById(R.id.r_b_elegirfoto);
+        elegirfoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mirar si la version es mayor o igual a marshmallow
+                if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                    //si lo es mirar si se han dado los permisos de lectura
+                    if(checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                        //si no hay permisos de lectura darselos
+                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 111);
+                    }
+                    else{
+                        //si ya hay permisos
+                        elegirfoto();
+                    }
+                }
+                else{
+                    //si la version es menor a marshmallow
+                    elegirfoto();
+                }
+            }
+        });
+
+        //boton sacar foto con la camara
+        Button sacarfoto=findViewById(R.id.r_b_sacarfoto);
+        sacarfoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //se ha de mirar primero si la version es igual o superior a la marshmallow
+                //si es igual o superior
+                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                    //si no hay permisos para acceder a la cámara, o escribir
+                    if(checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                        //dar permisos de camara y escritura
+                        requestPermissions(new String[]{android.Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE}, 112);
+                    }
+                    else{
+                        //si ya hay permisos se abre la camara
+                        abrirCamara();
+                    }
+                }
+                //si la version es menor a la marshmallow
+                else{
+                    abrirCamara();
+                }
+            }
+        });
+
 
         Button boton = findViewById(R.id.r_b_registrarse);
         //pulsar para registrarse
@@ -75,7 +149,8 @@ public class Registro extends AppCompatActivity {
                             Cursor c=db.existeUsuario(usuario.getText().toString().trim());
                             //si no existe se crea
                             if(c.getCount() == 0){
-                                db.aniadirUsuario(usuario.getText().toString().trim(), contrasenia.getText().toString().trim(), email.getText().toString().trim(), Integer.valueOf(telefono.getText().toString().trim()), nombre.getText().toString().trim());
+                                byte[] imagen=null;
+                                db.aniadirUsuario(usuario.getText().toString().trim(), contrasenia.getText().toString().trim(), email.getText().toString().trim(), Integer.valueOf(telefono.getText().toString().trim()), nombre.getText().toString().trim(), imagen);
                                 crearNotificacion("¡Bienvenido!","Hola, " + nombre.getText().toString().trim() + ". Te damos las gracias por unirte a nosotros. No dudes en publicar las películas que has visto para darnos tu opinión.");
                                 finish();
                             }
@@ -126,6 +201,107 @@ public class Registro extends AppCompatActivity {
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(contenido));
             nm.notify(1, b.build());
+        }
+    }
+
+    //metodo para cuando se usa la camara
+    private void abrirCamara(){
+        ContentValues cv=new ContentValues();
+        //informacion de la imagen
+        cv.put(MediaStore.Images.Media.TITLE, "Nueva Imagen");
+        cv.put(MediaStore.Images.Media.DESCRIPTION, "Nueva Imagen sacada con la cámara");
+        //uri de la imagen
+        imagen=getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,cv);
+
+        //crear intent para la camara
+        Intent camarai=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        camarai.putExtra(MediaStore.EXTRA_OUTPUT, imagen);
+        startActivityForResult(camarai,1111);
+    }
+
+    //metodo para cuando se elige foto de la galeria
+    private void elegirfoto(){
+        //crear intent para la galeria
+        Intent intent=new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, 1112);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            //si se esta sacando una foto
+            case 111:{
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    //se han dado los permisos necesarios
+                    abrirCamara();
+                }
+                else {
+                    //no se han dado los permisos necesarios
+                    Toast.makeText(this, "No se han aceptado los permisos", Toast.LENGTH_SHORT).show();
+                }
+            }
+            //si se esta eligiendo una foto de la galeria
+            case 112:{
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    //se han dado los permisos necesarios
+                    elegirfoto();
+                }
+                else {
+                    //no se han dado los permisos necesarios
+                    Toast.makeText(this, "No se han aceptado los permisos", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+
+        //cuando ya se ha sacado la foto
+        if(resultCode==RESULT_OK && requestCode==1111){
+            //ver vista previa de la imagen
+            vistaimagen.setImageURI(imagen);
+            //guardar la imagen en bitmap para luego subirla a la bd
+            BitmapDrawable bmd= (BitmapDrawable) vistaimagen.getDrawable();
+            bimagen=bmd.getBitmap();
+
+            //encontrar directorio de la galeria
+            File directorio= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+            //crear nombre de la foto sacada
+            String tiempo=new SimpleDateFormat("yyyyMMdd_HHmmss",Locale.getDefault()).format(new Date());
+            String nombre="IMG_"+tiempo+".jpg";
+            File imagenfinal=new File(directorio,nombre);
+
+            //Toast.makeText(this, String.valueOf(imagenfinal.exists()), Toast.LENGTH_SHORT).show();
+
+            try{
+                //guardar la foto en un file y enviarla a la galeria
+                 FileOutputStream fos=new FileOutputStream(imagenfinal);
+                 bimagen.compress(Bitmap.CompressFormat.PNG,100,fos);
+                 fos.flush();
+                 fos.close();
+
+                 //crear intent para que guarde la informacion de la imagen
+                 Intent intent=new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                 intent.setData(Uri.fromFile(imagenfinal));
+                 sendBroadcast(intent);
+
+                Toast.makeText(this, "Se ha guardado la imagen en la galería", Toast.LENGTH_SHORT).show();
+            }
+            catch(Exception e){
+                //no hace nada
+            }
+
+        }
+
+        //cuando ya se ha elegido la foto de la galeria
+        if(resultCode==RESULT_OK && requestCode==1112){
+            //visualizar la imagen
+            vistaimagen.setImageURI(data.getData());
         }
     }
 }
