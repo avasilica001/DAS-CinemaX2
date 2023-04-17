@@ -1,5 +1,6 @@
 package com.example.entrega1;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,13 +22,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class IniciarSesion extends AppCompatActivity {
+
+    private FirebaseFirestore firestore;
 
     private final Activity activity=this;
     private Context context=this;
@@ -37,6 +47,25 @@ public class IniciarSesion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iniciar_sesion);
+
+        firestore=FirebaseFirestore.getInstance();
+
+        Map<String,Object> users= new HashMap<>();
+        users.put("firstname","nombre");
+        users.put("lastname","apellido");
+        users.put("descripcion","guapo");
+
+        firestore.collection("users").add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(context, "Firebase funciona", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "Firebase no funciona", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         DBCinemax db=new DBCinemax(IniciarSesion.this);
         //no se utiliza pero se hace para que se cree la bd la primera vez

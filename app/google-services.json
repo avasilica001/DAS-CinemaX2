@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "755572164883",
+    "project_id": "das-cinemax2",
+    "storage_bucket": "das-cinemax2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755572164883:android:6f81df648faa26a21e72e6",
+        "android_client_info": {
+          "package_name": "com.example.entrega1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "755572164883-3esk9ukogkf97rfqs8bjmb76rtoj76re.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtSr4MdN3eKrUeIckvuwkNtUMbppyQH10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "755572164883-3esk9ukogkf97rfqs8bjmb76rtoj76re.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
