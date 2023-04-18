@@ -39,17 +39,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.scottyab.aescrypt.AESCrypt;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Registro extends AppCompatActivity {
 
@@ -178,7 +183,21 @@ public class Registro extends AppCompatActivity {
                                     byte[] b= baos.toByteArray();
                                     b64=Base64.encodeToString(b, Base64.DEFAULT);
 
-                                    //Toast.makeText(context, b64, Toast.LENGTH_SHORT).show();
+                                    //encriptar contrasenia
+
+                                    /*Basado en el código extraído de Stack Overflow
+                                     Pregunta: https://stackoverflow.com/questions/41223937/how-can-i-encrypte-my-password-android-studio
+                                     Respuesta: https://stackoverflow.com/a/60652350
+                                     Modificado para cambiar la password de encriptado
+                                     */
+                                    String  cencriptada="";
+                                    try {
+                                        cencriptada = AESCrypt.encrypt("EncriptadoCinemaXAPP", contrasenia.getText().toString().trim());
+                                    }catch (Exception e){
+                                        //no hace nada
+                                    }
+                                    String finalCencriptada = cencriptada;
+
                                     StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/registro.php", new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
@@ -199,7 +218,7 @@ public class Registro extends AppCompatActivity {
                                         protected Map<String, String> getParams() throws AuthFailureError {
                                             HashMap<String, String> parametros = new HashMap<String, String>();
                                             parametros.put("id", usuario.getText().toString().trim());
-                                            parametros.put("contrasenia", contrasenia.getText().toString().trim());
+                                            parametros.put("contrasenia", finalCencriptada);
                                             parametros.put("correo", email.getText().toString().trim());
                                             parametros.put("telefono", telefono.getText().toString().trim());
                                             parametros.put("nombreapellido", nombre.getText().toString().trim());
@@ -362,4 +381,6 @@ public class Registro extends AppCompatActivity {
 
         }
     }
+
+
 }

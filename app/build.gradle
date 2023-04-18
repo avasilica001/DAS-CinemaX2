@@ -44,4 +44,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
     implementation "androidx.core:core:1.6.0"
     implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.scottyab:aescrypt:0.0.1'
 }
