@@ -48,6 +48,7 @@ public class IniciarSesion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iniciar_sesion);
 
+        /*
         firestore=FirebaseFirestore.getInstance();
 
         Map<String,Object> users= new HashMap<>();
@@ -66,6 +67,7 @@ public class IniciarSesion extends AppCompatActivity {
                 Toast.makeText(context, "Firebase no funciona", Toast.LENGTH_SHORT).show();
             }
         });
+        */
 
         DBCinemax db=new DBCinemax(IniciarSesion.this);
         //no se utiliza pero se hace para que se cree la bd la primera vez
