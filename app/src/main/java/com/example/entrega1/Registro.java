@@ -15,6 +15,7 @@ import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -67,6 +68,9 @@ public class Registro extends AppCompatActivity {
     private String b64;
     private String nombreimagen;
 
+    private static final int IMAGE_CODE=112;
+    private static final int PHOTO_CODE=111;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,9 +96,9 @@ public class Registro extends AppCompatActivity {
                 //mirar si la version es mayor o igual a marshmallow
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     //si lo es mirar si se han dado los permisos de lectura
-                    if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    if (ActivityCompat.checkSelfPermission(Registro.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         //si no hay permisos de lectura darselos
-                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 111);
+                        ActivityCompat.requestPermissions(Registro.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, IMAGE_CODE);
                     } else {
                         //si ya hay permisos
                         elegirfoto();
@@ -115,9 +119,9 @@ public class Registro extends AppCompatActivity {
                 //si es igual o superior
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     //si no hay permisos para acceder a la cámara, o escribir
-                    if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    if (ActivityCompat.checkSelfPermission(Registro.this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(Registro.this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         //dar permisos de camara y escritura
-                        requestPermissions(new String[]{android.Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 112);
+                        ActivityCompat.requestPermissions(Registro.this,new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PHOTO_CODE);
                     } else {
                         //si ya hay permisos se abre la camara
                         abrirCamara();
@@ -313,26 +317,24 @@ public class Registro extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch (requestCode) {
-            //si se esta sacando una foto
-            case 111: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //se han dado los permisos necesarios
-                    abrirCamara();
-                } else {
-                    //no se han dado los permisos necesarios
-                    Toast.makeText(this, "No se han aceptado los permisos", Toast.LENGTH_SHORT).show();
-                }
+        //si se esta sacando una foto
+        if(requestCode==PHOTO_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //se han dado los permisos necesarios
+                abrirCamara();
+            } else {
+                //no se han dado los permisos necesarios
+                Toast.makeText(this, "No se han aceptado los permisos", Toast.LENGTH_SHORT).show();
             }
-            //si se esta eligiendo una foto de la galeria
-            case 112: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //se han dado los permisos necesarios
-                    elegirfoto();
-                } else {
-                    //no se han dado los permisos necesarios
-                    Toast.makeText(this, "No se han aceptado los permisos", Toast.LENGTH_SHORT).show();
-                }
+        }
+        //si se esta eligiendo una foto de la galeria
+        if(requestCode==IMAGE_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //se han dado los permisos necesarios
+                elegirfoto();
+            } else {
+                //no se han dado los permisos necesarios
+                Toast.makeText(this, "No se han aceptado los permisos", Toast.LENGTH_SHORT).show();
             }
         }
     }
