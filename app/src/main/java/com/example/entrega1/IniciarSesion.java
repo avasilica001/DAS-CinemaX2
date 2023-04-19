@@ -119,7 +119,7 @@ public class IniciarSesion extends AppCompatActivity {
                         public void onResponse(String response) {
                                 String respuesta=response.toString();
                                 System.out.print(respuesta);
-                                Toast.makeText(context, respuesta, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(context, respuesta, Toast.LENGTH_SHORT).show();
 
                                 if(respuesta.isEmpty()){
                                     Toast.makeText(context, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
@@ -138,7 +138,7 @@ public class IniciarSesion extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             //si ha habido algun error con la solicitud
-                            Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Se ha producido un error", Toast.LENGTH_SHORT).show();
                         }
                     }) {
                         @Override
@@ -193,7 +193,7 @@ public class IniciarSesion extends AppCompatActivity {
             }
             br.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            //no hace nada
         }
 
         //obtenemos un número aleatorio entre 0 y 9 para coger un elemento del array (una línea del txt)

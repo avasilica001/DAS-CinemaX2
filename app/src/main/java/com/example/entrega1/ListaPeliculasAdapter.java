@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -78,6 +79,8 @@ public class ListaPeliculasAdapter extends ArrayAdapter<String> {
                 Intent intent = new Intent(context, Pelicula.class);
                 intent.putExtra("id", String.valueOf(ids.get(p)));
                 intent.putExtra("usuario", usuario);
+                intent.putExtra("uel", urls.get(p));
+
                 activity.startActivityForResult(intent, 1);
             }
         });

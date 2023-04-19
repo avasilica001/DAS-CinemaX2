@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,11 +14,25 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.*;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class PaginaPrincipal extends AppCompatActivity {
 
     private final Activity activity=this;
+    private Context context=this;
 
     DBCinemax db=new DBCinemax(PaginaPrincipal.this);
 
@@ -32,6 +47,7 @@ public class PaginaPrincipal extends AppCompatActivity {
 
     ListaPeliculasAdapter adapter;
     String s_id;
+    String respuesta;
     Cursor c;
 
     @Override
@@ -49,11 +65,11 @@ public class PaginaPrincipal extends AppCompatActivity {
         //los arraylist se vacian porque si se pulsa continuamente los botones para obtener las películas solo se añadirían a la lista y se repetirian
         limpiarArrayLists();
         //se len las peliculas una vez vacios lo arraylists y se guardan
-        c=db.leerPeliculasTodas();
-        guardarDatosArray();
+
+        actualizarPeliculasTodas();
 
         //se crea el adaptar propio
-        adapter=new ListaPeliculasAdapter(PaginaPrincipal.this, PaginaPrincipal.this, p_id, p_nombre, p_anio, p_url, p_valoracion, p_descripcion, p_subidapor,s_id);
+        adapter=new ListaPeliculasAdapter(activity, activity, p_id, p_nombre, p_anio, p_url, p_valoracion, p_descripcion, p_subidapor,s_id);
         ListView l= (ListView) findViewById(R.id.lp_lv_listapeliculas);
         l.setAdapter(adapter);
 
@@ -99,20 +115,27 @@ public class PaginaPrincipal extends AppCompatActivity {
 
     //se toman los datos de la bd y se guardan en los arraylist
     public void guardarDatosArray(){
-        if (c.getCount()==0){
-            Toast.makeText(this,"No hay películas para mostrar",Toast.LENGTH_SHORT).show();
-        }
-        else{
-            while(c.moveToNext()){
-                p_id.add(c.getString(0));
-                p_nombre.add(c.getString(1));
-                p_anio.add(Integer.valueOf(c.getString(2)));
-                p_url.add(c.getString(3));
-                p_valoracion.add(Float.parseFloat(c.getString(4)));
-                p_descripcion.add(c.getString(5));
-                p_subidapor.add(c.getString(6));
+
+            try {
+                JSONArray jsona = new JSONArray(respuesta);
+
+                for (int i = 0; i < jsona.length(); i++)
+                {
+                    JSONObject json = jsona.getJSONObject(i);
+
+                    p_id.add(json.getString("id"));
+                    p_nombre.add(json.getString("nombre"));
+                    p_anio.add(Integer.valueOf(json.getString("anio")));
+                    p_url.add(json.getString("url"));
+                    p_valoracion.add(Float.parseFloat(json.getString("valoracion")));
+                    p_descripcion.add(json.getString("descripcion"));
+                    p_subidapor.add(json.getString("subidapor"));
+                }
+
+
+            }catch (Exception e){
+                //no hace nada
             }
-        }
     }
 
     //vaciar elementos de los arraylists
@@ -129,16 +152,69 @@ public class PaginaPrincipal extends AppCompatActivity {
     //hacer que se vea en el listview todas las peliculas
     public void actualizarPeliculasTodas(){
         limpiarArrayLists();
-        c=db.leerPeliculasTodas();
-        guardarDatosArray();
-        adapter.notifyDataSetChanged();
+        StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarpeliculas.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                respuesta=response;
+
+                if(respuesta.equals("null")){
+                    Toast.makeText(context, "No hay películas para mostrar", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    guardarDatosArray();
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //si ha habido algun error con la solicitud
+                Toast.makeText(context, "Se ha producido un error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //se envia la solicitud con los parametros
+        RequestQueue rq = Volley.newRequestQueue(context);
+        rq.add(sr);
     }
 
     //hacer que se vea en el listview solo las peliculas del usuario
     public void actualizarPeliculasUsuario(){
         limpiarArrayLists();
-        c=db.leerPeliculasUsuario(s_id);
-        guardarDatosArray();
-        adapter.notifyDataSetChanged();
+
+        StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarpeliculasusuario.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                respuesta=response;
+
+                if(respuesta.equals("null")){
+                    Toast.makeText(context, "No hay películas para mostrar", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    guardarDatosArray();
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //si ha habido algun error con la solicitud
+                Toast.makeText(context, "Se ha producido un error", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //se pasan todos los parametros necesarios en la solicitud
+                HashMap<String, String> parametros = new HashMap<String, String>();
+                parametros.put("id", s_id);
+
+                return parametros;
+            }
+        };
+
+        //se envia la solicitud con los parametros
+        RequestQueue rq = Volley.newRequestQueue(context);
+        rq.add(sr);
     }
 }

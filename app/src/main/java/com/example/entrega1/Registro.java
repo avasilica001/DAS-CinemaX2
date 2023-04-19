@@ -140,7 +140,6 @@ public class Registro extends AppCompatActivity {
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBCinemax db = new DBCinemax(Registro.this);
 
                 //si hay algun campo vacio no se deja registrar y manda un mensaje
                 if (usuario.getText().toString().trim().equals("") || contrasenia.getText().toString().trim().equals("") || email.getText().toString().trim().equals("") || telefono.getText().toString().trim().equals("") || nombre.getText().toString().trim().equals("")) {
@@ -168,11 +167,8 @@ public class Registro extends AppCompatActivity {
                         //si el email es valido (ej: cinemax@gmail.com)
                         if (rm.matches()) {
                             //se mira si el usuario con ese nombre ya existe
-                            Cursor c = db.existeUsuario(usuario.getText().toString().trim());
-                            if (c.getCount() == 0) {
 
                                 //si el usuario existe se mira que haya una imagen elegida o sacada
-
                                 if (imagen != null) {
                                     //para la imagen de uri a bitmap
                                     try {
@@ -241,9 +237,6 @@ public class Registro extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(context, "Es necesaria una foto de perfil.", Toast.LENGTH_SHORT).show();
                                 }
-                            } else {
-                                Toast.makeText(context, "Este nombre de usuario ya está en uso.", Toast.LENGTH_SHORT).show();
-                            }
                         } else {
                             //mensaje para email incorrecto
                             Toast.makeText(context, "Por favor introduce un email válido.", Toast.LENGTH_SHORT).show();
