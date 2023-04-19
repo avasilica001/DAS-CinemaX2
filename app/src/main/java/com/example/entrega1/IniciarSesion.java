@@ -22,10 +22,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.scottyab.aescrypt.AESCrypt;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -88,17 +96,64 @@ public class IniciarSesion extends AppCompatActivity {
             public void onClick(View v) {
                 //si alguno de los campos es distinto del vacio
                 if(!usuario.getText().toString().trim().equals("") || !contrasenia.getText().toString().trim().equals("")) {
-                    //se mira si existe alguien con ese usuario y se guarda en un cursor
-                    Cursor c=db.existeUsuario(usuario.getText().toString().trim());
+                    //se encripta la contrasenia
+
+                    /*Basado en el código extraído de Stack Overflow
+                     Pregunta: https://stackoverflow.com/questions/41223937/how-can-i-encrypte-my-password-android-studio
+                     Respuesta: https://stackoverflow.com/a/60652350
+                     Modificado para cambiar la password de encriptado
+                     */
+
+                    String  cencriptada="";
+                    try {
+                        cencriptada = AESCrypt.encrypt("EncriptadoCinemaXAPP", contrasenia.getText().toString().trim());
+                    }catch (Exception e){
+                        //no hace nada
+                    }
+                    String finalCencriptada = cencriptada;
+
+
+
+                    //se hace una peticion POST al servidor para registrar un usuario
+                    StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarusuario.php", new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (!response.equals("sucess")) {
+                                String respuesta=response.toString();
+                                Toast.makeText(context, respuesta, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //si ha habido algun error con la solicitud
+                            Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            //se pasan todos los parametros necesarios en la solicitud
+                            HashMap<String, String> parametros = new HashMap<String, String>();
+                            parametros.put("id", usuario.getText().toString().trim());
+                            parametros.put("contrasenia", finalCencriptada);
+
+                            return parametros;
+                        }
+                    };
+
+                    //se envia la solicitud con los parametros
+                    RequestQueue rq = Volley.newRequestQueue(context);
+                    rq.add(sr);
+
+
+
                     //si no hay usuario se manda un mensaje
-                    if (c.getCount() == 0) {
-                        Toast.makeText(context, "No se ha encontrado el usuario", Toast.LENGTH_SHORT).show();
-                    } else {
                         //si hay usuario con ese id
                         Cursor c2 = db.existeUsuarioContrasenia(usuario.getText().toString().trim(), contrasenia.getText().toString().trim());
                         if (c2.getCount() == 0) {
                             //si la contraseña del usuario que ya existe no coincide se manda mensaje
-                            Toast.makeText(context, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                         } else {
                             //una vez iniciada la bd se añaden los datos por defecto
                             //el usuario admin se prevee para no utilizarse todavia en esta entrega asi que no debería dar problemas
@@ -115,7 +170,7 @@ public class IniciarSesion extends AppCompatActivity {
                             //se manda una notificación aleatoria de las posibles cmo un tutorial para el usuario
                             notificacionAleatoria();
                             finish();
-                        }
+
                     }
                 }
             }

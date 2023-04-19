@@ -198,10 +198,12 @@ public class Registro extends AppCompatActivity {
                                     }
                                     String finalCencriptada = cencriptada;
 
+                                    //se hace una peticion POST al servidor para registrar un usuario
                                     StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/registro.php", new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String response) {
                                             if (!response.equals("sucess")) {
+                                                //si la solicitud se ha procesado correctamente
                                                 finish();
                                                 crearNotificacion("¡Bienvenido!", "Hola, " + nombre.getText().toString().trim() + ". Te damos las gracias por unirte a nosotros. No dudes en publicar las películas que has visto para darnos tu opinión.");
                                             }
@@ -210,12 +212,13 @@ public class Registro extends AppCompatActivity {
 
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            error.printStackTrace();
-                                            Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                                            //si ha habido algun error con la solicitud
+                                            Toast.makeText(context, "No se ha podido registrar el usuario", Toast.LENGTH_SHORT).show();
                                         }
                                     }) {
                                         @Override
                                         protected Map<String, String> getParams() throws AuthFailureError {
+                                            //se pasan todos los parametros necesarios en la solicitud
                                             HashMap<String, String> parametros = new HashMap<String, String>();
                                             parametros.put("id", usuario.getText().toString().trim());
                                             parametros.put("contrasenia", finalCencriptada);
@@ -223,12 +226,12 @@ public class Registro extends AppCompatActivity {
                                             parametros.put("telefono", telefono.getText().toString().trim());
                                             parametros.put("nombreapellido", nombre.getText().toString().trim());
                                             parametros.put("fotoperfil", b64);
-                                            //parametros.put("nombreimagen",nombreimagen);
 
                                             return parametros;
                                         }
                                     };
 
+                                    //se envia la solicitud con los parametros
                                     RequestQueue rq = Volley.newRequestQueue(context);
                                     rq.add(sr);
                                 } else {
@@ -348,23 +351,23 @@ public class Registro extends AppCompatActivity {
 
             //crear nombre de la foto sacada
             String tiempo = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-            nombreimagen = "IMG_" + tiempo + ".jpg";
+            nombreimagen = "IMG_" + tiempo + ".png";
             File imagenfinal = new File(directorio, nombreimagen);
 
             try {
                 //guardar la foto en un file y enviarla a la galeria
                 FileOutputStream fos = new FileOutputStream(imagenfinal);
                 bimagen.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                byte[] b = baos.toByteArray();
-                b64 = Base64.encodeToString(b, Base64.DEFAULT);
-                fos.flush();
+                //ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                //byte[] b = baos.toByteArray();
+                //b64 = Base64.encodeToString(b, Base64.DEFAULT);
+                //fos.flush();
                 fos.close();
 
                 //crear intent para que guarde la informacion de la imagen
-                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                intent.setData(Uri.fromFile(imagenfinal));
-                sendBroadcast(intent);
+                //Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                //intent.setData(Uri.fromFile(imagenfinal));
+                //sendBroadcast(intent);
 
                 Toast.makeText(this, "Se ha guardado la imagen en la galería", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
