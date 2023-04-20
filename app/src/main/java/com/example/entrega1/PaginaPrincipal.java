@@ -105,14 +105,6 @@ public class PaginaPrincipal extends AppCompatActivity {
         });
     }
 
-    //refrescar cuando se vuelve a la actividad main por si se ha añadido una película nueva, pàra que esta aparezca
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode==1){
-            recreate();
-        }
-    }
-
     //se toman los datos de la bd y se guardan en los arraylist
     public void guardarDatosArray(){
 

@@ -71,7 +71,6 @@ public class Pelicula extends AppCompatActivity {
         usuario=getIntent().getStringExtra("usuario");
         s_url=getIntent().getStringExtra("url");
 
-
         StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarpeliculaid.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -134,7 +133,54 @@ public class Pelicula extends AppCompatActivity {
                         eliminar.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                confirmarBorrar();
+                                //el cogido pertenece a las diapositivas de la asignatura sobre dialogos
+
+                                //dialogo para confirmar que se quiere borrar la pelicula
+                                AlertDialog.Builder ad=new AlertDialog.Builder(context);
+                                ad.setTitle("Eliminar "+nombre.getText().toString().trim());
+                                ad.setMessage("¿Estás seguro de que quieres borrar "+nombre.getText().toString().trim()+"? No podrás recuperar la películas después");
+                                ad.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                                    //si se pulsa que si se elimina la pelicula
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/eliminarpelicula.php", new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                finish();
+                                            }
+                                        }, new Response.ErrorListener() {
+
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                //si ha habido algun error con la solicitud
+                                                Toast.makeText(context, "Se ha producido un error", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }) {
+                                            @Override
+                                            protected Map<String, String> getParams() throws AuthFailureError {
+                                                //se pasan todos los parametros necesarios en la solicitud
+                                                HashMap<String, String> parametros = new HashMap<String, String>();
+                                                parametros.put("id", s_id);
+
+                                                Toast.makeText(context, s_id, Toast.LENGTH_SHORT).show();
+
+                                                return parametros;
+                                            }
+                                        };
+
+                                        //se envia la solicitud con los parametros
+                                        RequestQueue rq = Volley.newRequestQueue(context);
+                                        rq.add(sr);
+                                    }
+                                });
+                                //si se pulsa que no nos mantenemos en la actividad
+                                ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //no hace nada
+                                    }
+                                });
+                                ad.create().show();
                             }
                         });
 
@@ -173,33 +219,6 @@ public class Pelicula extends AppCompatActivity {
         RequestQueue rq = Volley.newRequestQueue(context);
         rq.add(sr);
 
-    }
-
-    private void confirmarBorrar(){
-
-        //el cogido pertenece a las diapositivas de la asignatura sobre dialogos
-
-        //dialogo para confirmar que se quiere borrar la pelicula
-        AlertDialog.Builder ad=new AlertDialog.Builder(this);
-        ad.setTitle("Eliminar "+nombre.getText().toString().trim());
-        ad.setMessage("¿Estás seguro de que quieres borrar "+nombre.getText().toString().trim()+"? No podrás recuperar la películas después");
-        ad.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-            //si se pulsa que si se elimina la pelicula
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                DBCinemax db=new DBCinemax(Pelicula.this);
-                db.eliminarPelicula(s_id);
-                finish();
-            }
-        });
-        //si se pulsa que no nos mantenemos en la actividad
-        ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //no hace nada
-            }
-        });
-        ad.create().show();
     }
 
     //si venimos de editar la pelicula este metodo actualiza los datos
