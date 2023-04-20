@@ -34,6 +34,8 @@ public class PaginaPrincipal extends AppCompatActivity {
     private final Activity activity=this;
     private Context context=this;
 
+    private RequestQueue rq;
+
     DBCinemax db=new DBCinemax(PaginaPrincipal.this);
 
     //arraylist con las columnas de la tabla pelicula
@@ -54,6 +56,8 @@ public class PaginaPrincipal extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        rq=Volley.newRequestQueue(context);
 
         //se guarda el id del usuario para usarse si hace falta ver sus propias peliculas
         s_id= getIntent().getStringExtra("id");
@@ -155,6 +159,7 @@ public class PaginaPrincipal extends AppCompatActivity {
                 else{
                     guardarDatosArray();
                     adapter.notifyDataSetChanged();
+                    rq.cancelAll("todas");
                 }
             }
         }, new Response.ErrorListener() {
@@ -167,7 +172,7 @@ public class PaginaPrincipal extends AppCompatActivity {
         });
 
         //se envia la solicitud con los parametros
-        RequestQueue rq = Volley.newRequestQueue(context);
+        sr.setTag("todas");
         rq.add(sr);
     }
 
@@ -186,6 +191,7 @@ public class PaginaPrincipal extends AppCompatActivity {
                 else{
                     guardarDatosArray();
                     adapter.notifyDataSetChanged();
+                    rq.cancelAll("usuario");
                 }
             }
         }, new Response.ErrorListener() {
@@ -206,7 +212,7 @@ public class PaginaPrincipal extends AppCompatActivity {
         };
 
         //se envia la solicitud con los parametros
-        RequestQueue rq = Volley.newRequestQueue(context);
+        sr.setTag("usuario");
         rq.add(sr);
     }
 }

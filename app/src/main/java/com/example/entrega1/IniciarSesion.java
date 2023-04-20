@@ -52,6 +52,8 @@ public class IniciarSesion extends AppCompatActivity {
     private Context context=this;
     private ArrayList<String> lineas=new ArrayList<>();
 
+    private RequestQueue rq;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +133,8 @@ public class IniciarSesion extends AppCompatActivity {
                                     //se manda una notificación aleatoria de las posibles cmo un tutorial para el usuario
                                     notificacionAleatoria();
                                     finish();
+
+                                    rq.cancelAll("login");
                                 }
                         }
                     }, new Response.ErrorListener() {
@@ -153,7 +157,8 @@ public class IniciarSesion extends AppCompatActivity {
                     };
 
                     //se envia la solicitud con los parametros
-                    RequestQueue rq = Volley.newRequestQueue(context);
+                    rq = Volley.newRequestQueue(context);
+                    sr.setTag("login");
                     rq.add(sr);
                     }
             }

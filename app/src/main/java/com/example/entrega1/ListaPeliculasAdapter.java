@@ -79,7 +79,6 @@ public class ListaPeliculasAdapter extends ArrayAdapter<String> {
                 Intent intent = new Intent(context, Pelicula.class);
                 intent.putExtra("id", String.valueOf(ids.get(p)));
                 intent.putExtra("usuario", usuario);
-                intent.putExtra("uel", urls.get(p));
 
                 activity.startActivityForResult(intent, 1);
             }

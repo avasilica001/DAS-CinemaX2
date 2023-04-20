@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ContentValues;
@@ -61,6 +62,8 @@ public class Registro extends AppCompatActivity {
 
     private Context context = this;
     private Activity activity = this;
+
+    RequestQueue rq;
     private EditText nombre, usuario, email, telefono, contrasenia;
     private ImageView vistaimagen;
     private Uri imagen;
@@ -206,6 +209,7 @@ public class Registro extends AppCompatActivity {
                                                 //si la solicitud se ha procesado correctamente
                                                 finish();
                                                 crearNotificacion("¡Bienvenido!", "Hola, " + nombre.getText().toString().trim() + ". Te damos las gracias por unirte a nosotros. No dudes en publicar las películas que has visto para darnos tu opinión.");
+                                                rq.cancelAll("registro");
                                             }
                                         }
                                     }, new Response.ErrorListener() {
@@ -232,7 +236,8 @@ public class Registro extends AppCompatActivity {
                                     };
 
                                     //se envia la solicitud con los parametros
-                                    RequestQueue rq = Volley.newRequestQueue(context);
+                                    rq = Volley.newRequestQueue(context);
+                                    sr.setTag("registro");
                                     rq.add(sr);
                                 } else {
                                     Toast.makeText(context, "Es necesaria una foto de perfil.", Toast.LENGTH_SHORT).show();
