@@ -10,8 +10,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,7 +45,7 @@ public class Pelicula extends AppCompatActivity {
     String respuesta;
 
     TextView id, nombre, anio, descripcion, creador;
-    ImageView url;
+    ImageView url, fotoperfil;
     RatingBar valoracion;
 
     Button actualizar,eliminar,volver;
@@ -66,7 +69,8 @@ public class Pelicula extends AppCompatActivity {
         actualizar=findViewById(R.id.p_b_modificar);
         eliminar=findViewById(R.id.p_b_borrar);
         volver=findViewById(R.id.p_b_volver);
-        //creador=findViewById(R.id.p_p_subidapor);
+        creador=findViewById(R.id.p_p_subidapor);
+        fotoperfil=findViewById(R.id.p_iv_fotoperfil);
 
         //se cogen los datos de la pelicula que ha sido pulsada pasados por el intent
 
@@ -74,14 +78,14 @@ public class Pelicula extends AppCompatActivity {
         usuario=getIntent().getStringExtra("usuario");
 
 
-        /*
-        StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarpeliculasusuario.php", new Response.Listener<String>() {
+
+        StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarpeliculaid.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 respuesta=response;
 
                 if(respuesta.equals("null")){
-                    //Toast.makeText(context, "Ha h", Toast.LENGTH_SHORT).show();
+                    //no hace nada
                 }
                 else{
 
@@ -97,12 +101,40 @@ public class Pelicula extends AppCompatActivity {
                             s_valoracion=json.getString("valoracion");
                             s_descripcion=json.getString("descripcion");
                             s_subidapor=json.getString("subidapor");
+
+                            byte[] imagenb = Base64.decode(json.getString("fotoperfil"), Base64.DEFAULT);
+                            Bitmap bitmapimagen = BitmapFactory.decodeByteArray(imagenb, 0, imagenb.length);
+
+                            nombre.setText(s_nombre);
+                            anio.setText(s_anio);
+                            Glide.with(context).load(json.getString("url")).into(url);
+                            valoracion.setRating(Float.parseFloat(s_valoracion));
+                            descripcion.setText(s_descripcion);
+                            creador.setText(s_subidapor);
+                            fotoperfil.setImageBitmap(bitmapimagen);
+
+                            //setear el titulo para que sea la pelicula
+                            ActionBar ab=getSupportActionBar();
+                            if (ab !=null){
+                                ab.setTitle(s_nombre);
+                            }
+
+                            //si la pelicula está subida por el usuario, se puede modificar o eliminar
+                            //si no es del usuario solo se puede ver o volver
+                            if (s_subidapor.equals(usuario)){
+                                actualizar.setVisibility(View.VISIBLE);
+                                eliminar.setVisibility(View.VISIBLE);
+                            }
+                            else
+                            {
+                                actualizar.setVisibility(View.GONE);
+                                eliminar.setVisibility(View.GONE);
+                            }
                         }
                     }catch (Exception e){
-
+                        //
                     }
                     rq.cancelAll("pelicula");
-
 
                 }
             }
@@ -118,7 +150,6 @@ public class Pelicula extends AppCompatActivity {
                 //se pasan todos los parametros necesarios en la solicitud
                 HashMap<String, String> parametros = new HashMap<String, String>();
                 parametros.put("id", s_id);
-
                 return parametros;
             }
         };
@@ -126,35 +157,6 @@ public class Pelicula extends AppCompatActivity {
         //se envia la solicitud con los parametros
         sr.setTag("pelicula");
         rq.add(sr);
-
-
-
-        nombre.setText(s_nombre);
-        anio.setText(s_anio);
-        Glide.with(context).load(s_url).into(url);
-        valoracion.setRating(Float.parseFloat(s_valoracion));
-        descripcion.setText(s_descripcion);
-        creador.setText(s_subidapor);
-
-         */
-
-        //setear el titulo para que sea la pelicula
-        ActionBar ab=getSupportActionBar();
-        if (ab !=null){
-            ab.setTitle(s_nombre);
-        }
-
-        //si la pelicula está subida por el usuario, se puede modificar o eliminar
-        //si no es del usuario solo se puede ver o volver
-        if (s_subidapor.equals(usuario)){
-            actualizar.setVisibility(View.VISIBLE);
-            eliminar.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            actualizar.setVisibility(View.GONE);
-            eliminar.setVisibility(View.GONE);
-        }
 
         //se pasan todos los datos de la película para que se puedan modificar a posteriori
         actualizar.setOnClickListener(new View.OnClickListener() {
@@ -202,9 +204,31 @@ public class Pelicula extends AppCompatActivity {
             //si se pulsa que si se elimina la pelicula
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //DBCinemax db=new DBCinemax(Pelicula.this);
-                //db.eliminarPelicula(s_id);
-                finish();
+                StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/eliminarpelicula.php", new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        rq.cancelAll("eliminar");
+                        finish();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //si ha habido algun error con la solicitud
+                        Toast.makeText(context, "Se ha producido un error", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        //se pasan todos los parametros necesarios en la solicitud
+                        HashMap<String, String> parametros = new HashMap<String, String>();
+                        parametros.put("id", s_id);
+                        return parametros;
+                    }
+                };
+
+                //se envia la solicitud con los parametros
+                sr.setTag("eliminar");
+                rq.add(sr);
             }
         });
         //si se pulsa que no nos mantenemos en la actividad

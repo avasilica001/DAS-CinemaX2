@@ -13,6 +13,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

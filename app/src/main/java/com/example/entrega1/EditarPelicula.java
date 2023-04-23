@@ -6,16 +6,35 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class EditarPelicula extends AppCompatActivity {
 
     Context context=this;
+    RequestQueue rq;
     EditText id, nombre, anio, url, descripcion;
     RatingBar valoracion;
     Button actualizar,volver;
@@ -39,6 +58,7 @@ public class EditarPelicula extends AppCompatActivity {
         //los datos que se han pasado por el intent al crear esta actividad ahora se guardan para usarse
         obtenerDatosIntent();
 
+
         ActionBar ab=getSupportActionBar();
         if (ab !=null){
             ab.setTitle(s_titulo);
@@ -47,7 +67,6 @@ public class EditarPelicula extends AppCompatActivity {
         actualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBCinemax db=new DBCinemax(EditarPelicula.this);
 
                 if (nombre.getText().toString().trim().equals("") || anio.getText().toString().trim().equals("")|| url.getText().toString().trim().equals("") || valoracion.toString().trim().equals("") || descripcion.getText().toString().trim().equals("")) {
                     Toast.makeText(context, "Rellena todos los campos",Toast.LENGTH_SHORT).show();
@@ -60,8 +79,38 @@ public class EditarPelicula extends AppCompatActivity {
                      Modificado para verificar que se trata de un integer de 4 cifras
                      */
                     if(anio.getText().toString().trim().matches("[0-9]+") && anio.getText().toString().trim().length() == 4) {
-                        db.modificarPelicula(s_id, nombre.getText().toString().trim(), Integer.valueOf(anio.getText().toString().trim()), url.getText().toString().trim(), valoracion.getRating(), descripcion.getText().toString().trim());
-                        finish();
+
+                        StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/actualizarpelicula.php", new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                rq.cancelAll("modificar");
+                                finish();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                //si ha habido algun error con la solicitud
+                                Toast.makeText(context, "Se ha producido un error", Toast.LENGTH_SHORT).show();
+                            }
+                        }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                //se pasan todos los parametros necesarios en la solicitud
+                                HashMap<String, String> parametros = new HashMap<String, String>();
+                                parametros.put("id", s_id);
+                                parametros.put("nombre", nombre.getText().toString().trim());
+                                parametros.put("anio", anio.getText().toString().trim());
+                                parametros.put("url", url.getText().toString().trim());
+                                parametros.put("valoracion", String.valueOf(valoracion.getRating()));
+                                parametros.put("descripcion", descripcion.getText().toString().trim());
+                                return parametros;
+                            }
+                        };
+
+                        //se envia la solicitud con los parametros
+                        sr.setTag("modificar");
+                        rq= Volley.newRequestQueue(context);
+                        rq.add(sr);
                     }
                     else{
                         Toast.makeText(context, "Introduce un año válido. Ejemplo: 1915",Toast.LENGTH_SHORT).show();

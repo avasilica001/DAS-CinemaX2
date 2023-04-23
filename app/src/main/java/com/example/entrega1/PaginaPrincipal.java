@@ -215,4 +215,10 @@ public class PaginaPrincipal extends AppCompatActivity {
         sr.setTag("usuario");
         rq.add(sr);
     }
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode==1){
+            recreate();
+        }
+    }
 }
