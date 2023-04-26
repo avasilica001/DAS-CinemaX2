@@ -33,13 +33,12 @@ import java.util.Map;
 
 public class EditarPelicula extends AppCompatActivity {
 
-    Context context=this;
-    RequestQueue rq;
-    EditText id, nombre, anio, url, descripcion;
-    RatingBar valoracion;
-    Button actualizar,volver;
-
-    String s_id,s_titulo,s_anio, s_url, s_valoracion, s_descripcion;
+    private Context context=this;
+    private RequestQueue rq;
+    private EditText id, nombre, anio, url, descripcion;
+    private RatingBar valoracion;
+    private Button actualizar,volver;
+    private String s_id,s_titulo,s_anio, s_url, s_valoracion, s_descripcion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +129,7 @@ public class EditarPelicula extends AppCompatActivity {
 
     private void obtenerDatosIntent(){
         if(getIntent().hasExtra("id") && getIntent().hasExtra("titulo") && getIntent().hasExtra("anio") && getIntent().hasExtra("url") && getIntent().hasExtra("valoracion") && getIntent().hasExtra("descripcion") ){
+            //guardar datos que se obtienen del intent
             s_id= getIntent().getStringExtra("id");
             s_titulo=getIntent().getStringExtra("titulo");
             s_anio=getIntent().getStringExtra("anio");

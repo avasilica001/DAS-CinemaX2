@@ -36,27 +36,25 @@ public class PaginaPrincipal extends AppCompatActivity {
 
     private RequestQueue rq;
 
-    DBCinemax db=new DBCinemax(PaginaPrincipal.this);
-
     //arraylist con las columnas de la tabla pelicula
-    ArrayList<String> p_id=new ArrayList<>();
-    ArrayList<String> p_nombre=new ArrayList<>();
-    ArrayList<Integer> p_anio=new ArrayList<>();
-    ArrayList<String> p_url=new ArrayList<>();
-    ArrayList<Float> p_valoracion=new ArrayList<>();
-    ArrayList<String> p_descripcion=new ArrayList<>();
-    ArrayList<String> p_subidapor=new ArrayList();
+    private ArrayList<String> p_id=new ArrayList<>();
+    private ArrayList<String> p_nombre=new ArrayList<>();
+    private ArrayList<Integer> p_anio=new ArrayList<>();
+    private ArrayList<String> p_url=new ArrayList<>();
+    private ArrayList<Float> p_valoracion=new ArrayList<>();
+    private ArrayList<String> p_descripcion=new ArrayList<>();
+    private ArrayList<String> p_subidapor=new ArrayList();
 
-    ListaPeliculasAdapter adapter;
-    String s_id;
-    String respuesta;
-    Cursor c;
+    private ListaPeliculasAdapter adapter;
+    private String s_id;
+    private String respuesta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //se pide la request queue para poder enviar peticiones
         rq=Volley.newRequestQueue(context);
 
         //se guarda el id del usuario para usarse si hace falta ver sus propias peliculas
@@ -112,30 +110,31 @@ public class PaginaPrincipal extends AppCompatActivity {
     //se toman los datos de la bd y se guardan en los arraylist
     public void guardarDatosArray(){
 
-            try {
-                JSONArray jsona = new JSONArray(respuesta);
+    //se obtiene el json en formato string que se vuelve a pasar a array de json
+        try {
+            JSONArray jsona = new JSONArray(respuesta);
+            //para cada elemento del array que es un json
 
-                for (int i = 0; i < jsona.length(); i++)
-                {
-                    JSONObject json = jsona.getJSONObject(i);
-
-                    p_id.add(json.getString("id"));
-                    p_nombre.add(json.getString("nombre"));
-                    p_anio.add(Integer.valueOf(json.getString("anio")));
-                    p_url.add(json.getString("url"));
-                    p_valoracion.add(Float.parseFloat(json.getString("valoracion")));
-                    p_descripcion.add(json.getString("descripcion"));
-                    p_subidapor.add(json.getString("subidapor"));
-                }
-
-
-            }catch (Exception e){
-                //no hace nada
+            for (int i = 0; i < jsona.length(); i++)
+            {
+                JSONObject json = jsona.getJSONObject(i);
+                //se obtienen los datos del json y se setean para poder verse
+                p_id.add(json.getString("id"));
+                p_nombre.add(json.getString("nombre"));
+                p_anio.add(Integer.valueOf(json.getString("anio")));
+                p_url.add(json.getString("url"));
+                p_valoracion.add(Float.parseFloat(json.getString("valoracion")));
+                p_descripcion.add(json.getString("descripcion"));
+                p_subidapor.add(json.getString("subidapor"));
             }
+        }catch (Exception e){
+            //no hace nada
+        }
     }
 
     //vaciar elementos de los arraylists
     public void limpiarArrayLists(){
+        //vaciar todos los elementos del array
         p_id.clear();
         p_nombre.clear();
         p_anio.clear();
@@ -147,16 +146,19 @@ public class PaginaPrincipal extends AppCompatActivity {
 
     //hacer que se vea en el listview todas las peliculas
     public void actualizarPeliculasTodas(){
+        //se vacia el array para no repetir las mismas peliculas
         limpiarArrayLists();
         StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarpeliculas.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 respuesta=response;
 
+                //si no hay peliculas manda mensaje
                 if(respuesta.equals("null")){
                     Toast.makeText(context, "No hay películas para mostrar", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    //se visualizan los datos de las peliculas
                     guardarDatosArray();
                     adapter.notifyDataSetChanged();
                     rq.cancelAll("todas");
@@ -178,6 +180,7 @@ public class PaginaPrincipal extends AppCompatActivity {
 
     //hacer que se vea en el listview solo las peliculas del usuario
     public void actualizarPeliculasUsuario(){
+        //se borran los datos de los arraylist para no repetir peliculas
         limpiarArrayLists();
 
         StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarpeliculasusuario.php", new Response.Listener<String>() {
@@ -185,10 +188,12 @@ public class PaginaPrincipal extends AppCompatActivity {
             public void onResponse(String response) {
                 respuesta=response;
 
+                //si no hay peliculas manda mensaje
                 if(respuesta.equals("null")){
                     Toast.makeText(context, "No hay películas para mostrar", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    //si hay se visualizan
                     guardarDatosArray();
                     adapter.notifyDataSetChanged();
                     rq.cancelAll("usuario");

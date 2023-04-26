@@ -63,27 +63,6 @@ public class IniciarSesion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iniciar_sesion);
 
-        /*
-        firestore=FirebaseFirestore.getInstance();
-
-        Map<String,Object> users= new HashMap<>();
-        users.put("firstname","nombre");
-        users.put("lastname","apellido");
-        users.put("descripcion","guapo");
-
-        firestore.collection("users").add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(context, "Firebase funciona", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "Firebase no funciona", Toast.LENGTH_SHORT).show();
-            }
-        });
-        */
-
         //se setea para que se pueda ver como título el nombre de la aplicación
         ActionBar ab=getSupportActionBar();
         ab.setTitle("CinemaX");
@@ -95,6 +74,7 @@ public class IniciarSesion extends AppCompatActivity {
         Button registrarse=findViewById(R.id.is_b_registrarse);
 
 
+        //obtener el token del dispositivo para poder realizar la prueba de la notificacion externamente
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
@@ -122,6 +102,7 @@ public class IniciarSesion extends AppCompatActivity {
                      */
 
                     String  cencriptada="";
+                    //se encripta la contrasenia introducida para ver si coincide con la encriptada en la base de datos
                     try {
                         cencriptada = AESCrypt.encrypt("EncriptadoCinemaXAPP", contrasenia.getText().toString().trim());
                     }catch (Exception e){
@@ -134,13 +115,13 @@ public class IniciarSesion extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                                 String respuesta=response.toString();
-                                System.out.print(respuesta);
-                                //Toast.makeText(context, respuesta, Toast.LENGTH_SHORT).show();
 
+                                //si la respuesta esta vacia imprime mensaje
                                 if(respuesta.isEmpty()){
                                     Toast.makeText(context, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
                                 }
                                 else{
+                                    //si no esta vacia significa que existe el usuario con ese usuario y contrasenia y se abre la siguiente actividad
                                     Intent intent = new Intent(IniciarSesion.this, PaginaPrincipal.class);
                                     intent.putExtra("id", usuario.getText().toString().trim());
                                     IniciarSesion.this.startActivity(intent);

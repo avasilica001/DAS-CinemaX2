@@ -64,7 +64,7 @@ public class Registro extends AppCompatActivity {
     private Context context = this;
     private Activity activity = this;
 
-    RequestQueue rq;
+    private RequestQueue rq;
     private EditText nombre, usuario, email, telefono, contrasenia;
     private ImageView vistaimagen;
     private Uri imagen;
@@ -194,6 +194,7 @@ public class Registro extends AppCompatActivity {
                                      Modificado para cambiar la password de encriptado
                                      */
                                     String  cencriptada="";
+                                    //se encripta la contasenia
                                     try {
                                         cencriptada = AESCrypt.encrypt("EncriptadoCinemaXAPP", contrasenia.getText().toString().trim());
                                     }catch (Exception e){
@@ -357,16 +358,8 @@ public class Registro extends AppCompatActivity {
                 //guardar la foto en un file y enviarla a la galeria
                 FileOutputStream fos = new FileOutputStream(imagenfinal);
                 bimagen.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                //ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                //byte[] b = baos.toByteArray();
-                //b64 = Base64.encodeToString(b, Base64.DEFAULT);
-                //fos.flush();
+                fos.flush();
                 fos.close();
-
-                //crear intent para que guarde la informacion de la imagen
-                //Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                //intent.setData(Uri.fromFile(imagenfinal));
-                //sendBroadcast(intent);
 
                 Toast.makeText(this, "Se ha guardado la imagen en la galería", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
@@ -387,6 +380,7 @@ public class Registro extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        //si la uri de imagen no esta vacia se guarda
         if(imagen != null && !imagen.equals(Uri.EMPTY)) {
             outState.putParcelable("imagen", imagen);
         }
@@ -395,6 +389,7 @@ public class Registro extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        //se recupera la uri y se setea de nuevo para verse
         imagen=savedInstanceState.getParcelable("imagen");
         vistaimagen.setImageURI(savedInstanceState.getParcelable("imagen"));
     }

@@ -39,24 +39,25 @@ import java.util.Map;
 
 public class Pelicula extends AppCompatActivity {
 
-    Activity activity=this;
-    Context context=this;
-    RequestQueue rq;
-    String respuesta;
+    private Activity activity=this;
+    private Context context=this;
+    private RequestQueue rq;
+    private String respuesta;
 
-    TextView id, nombre, anio, descripcion, creador;
-    ImageView url, fotoperfil;
-    RatingBar valoracion;
+    private TextView id, nombre, anio, descripcion, creador;
+    private ImageView url, fotoperfil;
+    private RatingBar valoracion;
 
-    Button actualizar,eliminar,volver;
+    private Button actualizar,eliminar,volver;
 
-    String s_id,usuario, s_nombre, s_anio, s_url, s_valoracion, s_descripcion, s_subidapor;
+    private String s_id,usuario, s_nombre, s_anio, s_url, s_valoracion, s_descripcion, s_subidapor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pelicula);
 
+        //se pide la requesqueue para poder enviar peticiones
         rq = Volley.newRequestQueue(context);
 
         //obtener elementos de la vista
@@ -77,8 +78,6 @@ public class Pelicula extends AppCompatActivity {
         s_id= getIntent().getStringExtra("id");
         usuario=getIntent().getStringExtra("usuario");
 
-
-
         StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarpeliculaid.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -88,11 +87,13 @@ public class Pelicula extends AppCompatActivity {
                     //no hace nada
                 }
                 else{
-
+                    //si la espuesta no esta vacia
                     try {
+                        //se pasa de string a array de json
                         JSONArray jsona = new JSONArray(respuesta);
 
                         for (int i = 0; i < jsona.length(); i++) {
+                            //para cada elementos del json se guardan sus elementos y se setean para que se puedan visualizar
                             JSONObject json = jsona.getJSONObject(i);
 
                             s_nombre=json.getString("nombre");
@@ -102,6 +103,7 @@ public class Pelicula extends AppCompatActivity {
                             s_descripcion=json.getString("descripcion");
                             s_subidapor=json.getString("subidapor");
 
+                            //se descodifica la imagen de foto de perfil de usuario para que se pueda ver
                             byte[] imagenb = Base64.decode(json.getString("fotoperfil"), Base64.DEFAULT);
                             Bitmap bitmapimagen = BitmapFactory.decodeByteArray(imagenb, 0, imagenb.length);
 
@@ -207,6 +209,7 @@ public class Pelicula extends AppCompatActivity {
                 StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/eliminarpelicula.php", new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        //se vuelve a la actividad anterior
                         rq.cancelAll("eliminar");
                         finish();
                     }
