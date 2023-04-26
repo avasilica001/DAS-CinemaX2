@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,10 +30,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.scottyab.aescrypt.AESCrypt;
 
 import java.io.BufferedReader;
@@ -80,10 +84,6 @@ public class IniciarSesion extends AppCompatActivity {
         });
         */
 
-        DBCinemax db=new DBCinemax(IniciarSesion.this);
-        //no se utiliza pero se hace para que se cree la bd la primera vez
-        db.eliminarPelicula(String.valueOf(-1));
-
         //se setea para que se pueda ver como título el nombre de la aplicación
         ActionBar ab=getSupportActionBar();
         ab.setTitle("CinemaX");
@@ -93,6 +93,20 @@ public class IniciarSesion extends AppCompatActivity {
         EditText contrasenia=findViewById(R.id.is_t_contrasenia);
         Button iniciars=findViewById(R.id.is_b_iniciarsesion);
         Button registrarse=findViewById(R.id.is_b_registrarse);
+
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()){
+                            task.getException();
+                            return;
+                        }
+                        else{
+                            Log.d("token",task.getResult());
+                        }
+                    }
+                });
 
         iniciars.setOnClickListener(new View.OnClickListener() {
             @Override

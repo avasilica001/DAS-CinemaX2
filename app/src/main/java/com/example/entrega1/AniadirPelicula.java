@@ -1,7 +1,13 @@
 package com.example.entrega1;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -22,6 +28,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,10 +39,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AniadirPelicula extends AppCompatActivity {
-    Context context=this;
-    RequestQueue rq;
+    private Context context=this;
+    private RequestQueue rq;
 
-    String s_id;
+    private String s_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +65,6 @@ public class AniadirPelicula extends AppCompatActivity {
         aniadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBCinemax db=new DBCinemax(AniadirPelicula.this);
 
                 if (titulo.getText().toString().trim().equals("") || anio.getText().toString().trim().equals("") || url.getText().toString().trim().equals("")  || valoracion.toString().trim().equals("") || descripcion.getText().toString().trim().equals("")) {
                     Toast.makeText(context, "Rellena todos los campos",Toast.LENGTH_SHORT).show();
@@ -75,8 +83,6 @@ public class AniadirPelicula extends AppCompatActivity {
                             @Override
                             public void onResponse(String response) {
                                 String respuesta=response;
-
-                                Toast.makeText(context, respuesta, Toast.LENGTH_SHORT).show();
 
                                 rq.cancelAll("aniadir");
                                 finish();
@@ -117,4 +123,5 @@ public class AniadirPelicula extends AppCompatActivity {
             }
         });
     }
+
 }

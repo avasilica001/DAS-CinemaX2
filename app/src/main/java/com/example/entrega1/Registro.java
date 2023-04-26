@@ -138,7 +138,6 @@ public class Registro extends AppCompatActivity {
             }
         });
 
-
         Button boton = findViewById(R.id.r_b_registrarse);
         //pulsar para registrarse
         boton.setOnClickListener(new View.OnClickListener() {
@@ -297,7 +296,6 @@ public class Registro extends AppCompatActivity {
         cv.put(MediaStore.Images.Media.DESCRIPTION, "Nueva Imagen sacada con la cámara");
         //uri de la imagen
         imagen = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
-
         //crear intent para la camara
         Intent camarai = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         camarai.putExtra(MediaStore.EXTRA_OUTPUT, imagen);
@@ -389,14 +387,16 @@ public class Registro extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("imagen", imagen);
+        if(imagen != null && !imagen.equals(Uri.EMPTY)) {
+            outState.putParcelable("imagen", imagen);
+        }
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Uri img = savedInstanceState.getParcelable("imagen");
-        vistaimagen.setImageURI(img);
+        imagen=savedInstanceState.getParcelable("imagen");
+        vistaimagen.setImageURI(savedInstanceState.getParcelable("imagen"));
     }
 
 }
