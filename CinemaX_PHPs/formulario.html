@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<title>Formulario</title>
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<h1>Formulario de prueba de las notificaciones</h1>
+
+		<p> El token se puede obtener buscando "token" en el Logcat al iniciar la aplicación. </p>
+		<form action="notificacion.php" method="POST" enctype="multipart/form-data">
+			<label for="token">Token del dispositivo: </label>
+			<input type="text" id="token" name="token"/><br/>
+
+			<label for="mensaje">Mensaje: </label>
+			<input type="text" name="mensaje"/>
+			<p></p>
+			<input type="submit" value="Enviar"/>
+		</form>
+	</body>
+</html>
