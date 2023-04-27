@@ -29,6 +29,7 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +43,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.scottyab.aescrypt.AESCrypt;
 
 import java.io.ByteArrayInputStream;
@@ -75,6 +79,8 @@ public class Registro extends AppCompatActivity {
     private static final int IMAGE_CODE=112;
     private static final int PHOTO_CODE=111;
 
+    private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +89,21 @@ public class Registro extends AppCompatActivity {
         //se setea la barra superior
         ActionBar ab = getSupportActionBar();
         ab.setTitle("CinemaX");
+
+        //obtener el token del dispositivo para poder realizar la prueba de la notificacion externamente
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()){
+                    task.getException();
+                    return;
+                }
+                else{
+                    Log.d("token",task.getResult());
+                    token=task.getResult();
+                }
+            }
+        });
 
         //obtener datos de la vista
         nombre = findViewById(R.id.r_t_nombrecompleto);
@@ -231,6 +252,7 @@ public class Registro extends AppCompatActivity {
                                             parametros.put("telefono", telefono.getText().toString().trim());
                                             parametros.put("nombreapellido", nombre.getText().toString().trim());
                                             parametros.put("fotoperfil", b64);
+                                            parametros.put("token", token);
 
                                             return parametros;
                                         }

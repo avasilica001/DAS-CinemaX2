@@ -71,21 +71,6 @@ public class IniciarSesion extends AppCompatActivity {
         Button iniciars=findViewById(R.id.is_b_iniciarsesion);
         Button registrarse=findViewById(R.id.is_b_registrarse);
 
-
-        //obtener el token del dispositivo para poder realizar la prueba de la notificacion externamente
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()){
-                            task.getException();
-                            return;
-                        }
-                        else{
-                            Log.d("token",task.getResult());
-                        }
-                    }
-                });
-
         iniciars.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
