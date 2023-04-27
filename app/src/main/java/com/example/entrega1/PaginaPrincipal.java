@@ -146,12 +146,13 @@ public class PaginaPrincipal extends AppCompatActivity {
 
     //hacer que se vea en el listview todas las peliculas
     public void actualizarPeliculasTodas(){
-        //se vacia el array para no repetir las mismas peliculas
-        limpiarArrayLists();
         StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarpeliculas.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 respuesta=response;
+
+                //se vacia el array para no repetir las mismas peliculas
+                limpiarArrayLists();
 
                 //si no hay peliculas manda mensaje
                 if(respuesta.equals("null")){
@@ -160,9 +161,9 @@ public class PaginaPrincipal extends AppCompatActivity {
                 else{
                     //se visualizan los datos de las peliculas
                     guardarDatosArray();
-                    adapter.notifyDataSetChanged();
-                    rq.cancelAll("todas");
                 }
+                adapter.notifyDataSetChanged();
+                rq.cancelAll("todas");
             }
         }, new Response.ErrorListener() {
 
@@ -180,13 +181,13 @@ public class PaginaPrincipal extends AppCompatActivity {
 
     //hacer que se vea en el listview solo las peliculas del usuario
     public void actualizarPeliculasUsuario(){
-        //se borran los datos de los arraylist para no repetir peliculas
-        limpiarArrayLists();
-
         StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/avasilica001/WEB/buscarpeliculasusuario.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 respuesta=response;
+
+                //se borran los datos de los arraylist para no repetir peliculas
+                limpiarArrayLists();
 
                 //si no hay peliculas manda mensaje
                 if(respuesta.equals("null")){
@@ -195,9 +196,9 @@ public class PaginaPrincipal extends AppCompatActivity {
                 else{
                     //si hay se visualizan
                     guardarDatosArray();
-                    adapter.notifyDataSetChanged();
-                    rq.cancelAll("usuario");
                 }
+                adapter.notifyDataSetChanged();
+                rq.cancelAll("usuario");
             }
         }, new Response.ErrorListener() {
             @Override
@@ -220,10 +221,12 @@ public class PaginaPrincipal extends AppCompatActivity {
         sr.setTag("usuario");
         rq.add(sr);
     }
+
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode==1){
             recreate();
         }
     }
+
 }

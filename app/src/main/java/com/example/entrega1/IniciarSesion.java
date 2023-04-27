@@ -50,8 +50,6 @@ import org.json.*;
 
 public class IniciarSesion extends AppCompatActivity {
 
-    private FirebaseFirestore firestore;
-
     private final Activity activity=this;
     private Context context=this;
     private ArrayList<String> lineas=new ArrayList<>();
