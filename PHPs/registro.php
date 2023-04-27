@@ -18,9 +18,10 @@ $correo = $_POST["correo"];
 $telefono = intval($_POST["telefono"]);
 $nombreapellido = $_POST["nombreapellido"];
 $foto=$_POST["fotoperfil"];
+$token=$_POST["token"];
 
 
-$sql = "INSERT INTO Usuarios (id, contrasenia, correo, telefono, nombreapellido, fotoperfil) VALUES ('$id', '$contrasenia', '$correo', '$telefono', '$nombreapellido', '$foto')";
+$sql = "INSERT INTO Usuarios (id, contrasenia, correo, telefono, nombreapellido, fotoperfil, token) VALUES ('$id', '$contrasenia', '$correo', '$telefono', '$nombreapellido', '$foto', '$token')";
 
 if ($conn->query($sql) === TRUE) {
     echo "New user created successfully";
