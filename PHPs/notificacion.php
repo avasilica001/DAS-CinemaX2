@@ -20,7 +20,7 @@ $resultado = $conn->query($sql);
 while($row = mysqli_fetch_row($resultado)) {
 
 	// Cuerpo de la solicitud HTTP POST
-	$msg = array( 'to' => $row[0], 'notification' => array( 'title' => "Prueba CinemaX Nofiticacion", 'body' => $message,'sound' => 'default'));
+	$msg = array( 'to' => $row[0], 'notification' => array( 'title' => "Prueba CinemaX Nofiticacion", 'body' => "Prueba CinemaX Notificacion",'sound' => 'default'));
 
 	$msgJSON= json_encode( $msg);
 
